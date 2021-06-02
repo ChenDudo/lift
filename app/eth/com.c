@@ -238,7 +238,7 @@ void broadcastStateMachine()
             if (c2first){
                 phySelA = !phySelA;
                 changePhy(phySelA);
-                checkPhyStatus(phySelA);
+                //while(!delay(2));
                 sendBoardIdx = myBoardIdx;
                 sendBCType = bcType;
                 prepareBroadCastDat(sendBoardIdx, 0);
@@ -287,6 +287,7 @@ void broadcastStateMachine()
             if (c4first){
                 phySelA = defaultphySelA;
                 changePhy(phySelA);
+                //while(!delay(2));
                 c4first = false;
             }
             if (phyLink_Flag){

@@ -35,9 +35,17 @@ void lcd_tick()
 ////////////////////////////////////////////////////////////////////////////////
 void dispLED(u8 phy1, u8 phy2)
 {
-    static u16 y1 = 224;
-    static u16 x1 = 20;
-    static u16 x2 = 270;
+    static u16 x1,x2,y1;
+    if (WIDTH > HEIGHT){
+        y1 = 224;
+        x1 = 20;
+        x2 = 270;
+    }
+    else {
+        y1 = 224;
+        x1 = 20;
+        x2 = 200;
+    }
     phy1 ? drawRec (x1,  y1 , 30,  16, Green) : drawRec (x1,  y1 , 30,  16, Red);
     phy2 ? drawRec (x2,  y1 , 30,  16, Green) : drawRec (x2,  y1 , 30,  16, Red);
 }
@@ -47,14 +55,23 @@ void dispButton(u8 upflag, u8 dnflag)
 {
     u16 c1 = upflag ? Yellow : Black;
     u16 c2 = dnflag ? Yellow : Black;
-    drawTriangle(292, 120 - 10, 20, 30, 0, c1);
-    drawTriangle(292, 120 + 10, 20, 30, 1, c2);
+    if(WIDTH > HEIGHT){
+        drawTriangle(292, 120 - 10, 20, 30, 0, c1);
+        drawTriangle(292, 120 + 10, 20, 30, 1, c2);
+    }
+    else{
+        drawTriangle(WIDTH/2-10, 30, 20, 30, 0, c1);
+        drawTriangle(WIDTH/2-10, HEIGHT - 30, 20, 30, 1, c2);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void dispIdx(u16 idx)
 {
-    drawNum(28, 66, 1, idx);
+    if(WIDTH > HEIGHT)
+        drawNum(28, 66, 1, 1, idx);
+    else
+        drawNum(15, 120, 1, 0, idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +83,7 @@ void clearLeftScreen()
 ////////////////////////////////////////////////////////////////////////////////
 void clearAllScreen()
 {
-	drawRec (0 , 0 , 320, 240, Black);
+	drawRec (0 , 0 , WIDTH, HEIGHT, Black);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

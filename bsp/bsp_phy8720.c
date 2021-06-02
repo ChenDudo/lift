@@ -192,7 +192,7 @@ void checkPhyStatus(u16 phy_addr)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void initPhy_8720(u16 phy_addr)
+void DeInitPhy_8720(u16 phy_addr)
 {
     changeAutoMDIX(phy_addr, 0);
     
@@ -208,16 +208,24 @@ void initPhy_8720(u16 phy_addr)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void initPhy_8720(u16 phy_addr)
+{
+    ETH_WritePHYRegister(phy_addr, PHY_BCR, 0x2100);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void changePhy(u8 mode)
 {
     switch(mode){
         case 0:
         closePhy_8720(PHY_ADDRESS_LAN8720_B);
         initPhy_8720(PHY_ADDRESS_LAN8720_A);
+        checkPhyStatus(PHY_ADDRESS_LAN8720_A);
         break;
         case 1:
         closePhy_8720(PHY_ADDRESS_LAN8720_A);
         initPhy_8720(PHY_ADDRESS_LAN8720_B);
+        checkPhyStatus(PHY_ADDRESS_LAN8720_B);
         break;
         default:
         closePhy_8720(PHY_ADDRESS_LAN8720_A);
@@ -229,7 +237,10 @@ void changePhy(u8 mode)
 ////////////////////////////////////////////////////////////////////////////////
 void BSP_PHY8720_Configure(u8 mode)
 {
-    changePhy(mode);
+    //changePhy(mode);
+    DeInitPhy_8720(PHY_ADDRESS_LAN8720_A);
+    DeInitPhy_8720(PHY_ADDRESS_LAN8720_B);
+    closePhy_8720(PHY_ADDRESS_LAN8720_B);
 }
 
 /// @}

@@ -389,6 +389,27 @@ void drawDSEG_88_107(u16 x, u16 y, u8 bc, u8 idx)
     }
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+void drawDSEG_72_80(u16 x, u16 y, u8 bc, u8 idx) 
+{
+    u16 k = idx;
+    for (u16 i = 0; i < 720; i++) {
+        for (u16 j = 0; j < 8; j++){
+            u16 tempXLoc = (i*8 + j) % 72 ;
+            u16 tempYLoc = (i*8 + j) / 72 ;
+            if (DSEG_72_80[k][i] & (0x01 << (7-j))){
+                drawPoint(x + tempXLoc, y + tempYLoc, text.fore);
+            }
+            else{
+                if (bc) {
+                    drawPoint(x + tempXLoc, y + tempYLoc, text.back);
+                }
+            }
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 void drawTriangle(u16 x, u16 y, u16 w, u16 h, u16 md, u16 c)
 {
@@ -407,23 +428,43 @@ void drawTriangle(u16 x, u16 y, u16 w, u16 h, u16 md, u16 c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawNum(u16 x, u16 y, u8 bc, s16 num) 
+void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num) 
 {
-    u16 x1 = x, x2 = x + 88, x3 = x + 176;
-    if (num >= 0 && num <= 9) {
-        drawDSEG_88_107(x1, y, bc, 0);
-        drawDSEG_88_107(x2, y, bc, 0);
-        drawDSEG_88_107(x3, y, bc, num);
+    if (mode){
+        u16 x1 = x, x2 = x + 88, x3 = x + 176;
+        if (num >= 0 && num <= 9) {
+            drawDSEG_88_107(x1, y, bc, 0);
+            drawDSEG_88_107(x2, y, bc, 0);
+            drawDSEG_88_107(x3, y, bc, num);
+        }
+        if (num >= 9 && num <= 99) {
+            drawDSEG_88_107(x1, y, bc, 0);
+            drawDSEG_88_107(x2, y, bc, num / 10);
+            drawDSEG_88_107(x3, y, bc, num % 10);
+        }
+        if (num >= 99 && num <= 999) {
+            drawDSEG_88_107(x1, y, bc, num / 100);
+            drawDSEG_88_107(x2, y, bc, (num % 100) / 10);
+            drawDSEG_88_107(x3, y, bc, num % 10);
+        }
     }
-    if (num >= 9 && num <= 99) {
-        drawDSEG_88_107(x1, y, bc, 0);
-        drawDSEG_88_107(x2, y, bc, num / 10);
-        drawDSEG_88_107(x3, y, bc, num % 10);
-    }
-    if (num >= 99 && num <= 999) {
-        drawDSEG_88_107(x1, y, bc, num / 100);
-        drawDSEG_88_107(x2, y, bc, (num % 100) / 10);
-        drawDSEG_88_107(x3, y, bc, num % 10);
+    else {
+        u16 x1 = x, x2 = x + 72, x3 = x + 144;
+        if (num >= 0 && num <= 9) {
+            drawDSEG_72_80(x1, y, bc, 0);
+            drawDSEG_72_80(x2, y, bc, 0);
+            drawDSEG_72_80(x3, y, bc, num);
+        }
+        if (num >= 9 && num <= 99) {
+            drawDSEG_72_80(x1, y, bc, 0);
+            drawDSEG_72_80(x2, y, bc, num / 10);
+            drawDSEG_72_80(x3, y, bc, num % 10);
+        }
+        if (num >= 99 && num <= 999) {
+            drawDSEG_72_80(x1, y, bc, num / 100);
+            drawDSEG_72_80(x2, y, bc, (num % 100) / 10);
+            drawDSEG_72_80(x3, y, bc, num % 10);
+        }
     }
 }
 
@@ -766,8 +807,9 @@ void LCDC_Init_Reg()
     lcdCmd(0x11); 
     while(!delay(120)); 
     
-    lcdCmd(0x36);  
-    lcdData(0x60); 
+    lcdCmd(0x36);
+    lcdData(0x00);
+    //lcdData(0x60); 
     
     lcdCmd(0x3A); 
     lcdData(0X05); 

@@ -45,7 +45,7 @@
 /// @addtogroup UID_Exported_Functions
 /// @{
 
-#define BCPEIROD 200
+#define BCPEIROD 80
 
 devType revDev[100];
 u32 masterTickCnt;

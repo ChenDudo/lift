@@ -99,6 +99,11 @@ void hci_tick()
 //    for(u8 i = 0; i < 4; i++){
 //        ledStatus[i] = !ledStatus[i];
 //    }
+    static u16 hciCnt;
+    if (hciCnt++ > 499){
+        hciCnt = 0;
+        ledStatus[3] = !ledStatus[3];
+    }
     BSP_KeyTick();
     ledStatus[0] = dev_Up;
     ledStatus[1] = dev_Dn;

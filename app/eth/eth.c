@@ -70,11 +70,12 @@ void eth_task()
 void eth_tick()
 {
     ledStatus[2] = phyLink_Flag;
-    phyLink_Flag ? checkPhyStatus(phySelA) : writePhyConfig(phySelA);
+    //phyLink_Flag ? checkPhyStatus(phySelA) : writePhyConfig(phySelA);
+    checkPhyStatus(phySelA);
     
     if (!phySelA)
         phyA_Linked = phyLink_Flag ? true : false;
-    if (!phySelA)
+    if (phySelA)
         phyB_Linked = phyLink_Flag ? true : false;
 }
 

@@ -6,8 +6,13 @@
 
 #if defined(__MDM2803) || defined(__MDM2803_N)
 
+#if defined(__WIDESCREEN)
 #define WIDTH       320                 /* Screen Width (in pixels)           */
 #define HEIGHT      240                 /* Screen Hight (in pixels)           */
+#else
+#define WIDTH       240                 /* Screen Width (in pixels)           */
+#define HEIGHT      320                 /* Screen Hight (in pixels)           */
+#endif
 
 enum {	SPACE,	FRAME};
 enum {	NUL,	FILL};
@@ -161,8 +166,8 @@ static void _delay(u32 n);
 void initGPIO_LCD();
 void initFSMC(void);
 
-void drawCharCD(u16 x, u16 y, u8 bc, char c) ;
-void drawNum(u16 x, u16 y, u8 bc, s16 num);
+void drawCharCD(u16 x, u16 y, u8 bc, char c);
+void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num);
 void drawTriangle(u16 x, u16 y, u16 w, u16 h, u16 md, u16 c);
 
 #endif
