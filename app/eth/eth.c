@@ -204,7 +204,7 @@ void ETH_Configure(void)
     ETH_DMARxDescChainInit(DMARxDscrTab, &Rx_Buff[0][0], ETH_RX_BUF_NUM);
     ETH_DMAITConfig(ETH_DMAIER_TIE | ETH_DMAIER_RIE, ENABLE);
     
-    BSP_PHY8720_Configure(phySelA);
+    BSP_PHY8720_Configure(defaultphySelA);
     
     ETH_NVIC_Config();
     ETH_Start();

@@ -207,9 +207,11 @@ void DeInitPhy_8720(u16 phy_addr)
     (ETH_Speed_10M == ETH_InitStructure.ETH_Speed) ? (SYSCFG->CFGR2 &= ~(1 << 21)) : (SYSCFG->CFGR2 |= (1 << 21));
 }
 
+u16 readPhyValue;
 ////////////////////////////////////////////////////////////////////////////////
 void initPhy_8720(u16 phy_addr)
 {
+    readPhyValue = ETH_ReadPHYRegister(phy_addr, PHY_BCR);
     ETH_WritePHYRegister(phy_addr, PHY_BCR, 0x2100);
 }
 
@@ -235,7 +237,7 @@ void changePhy(u8 mode)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void BSP_PHY8720_Configure(u8 mode)
+void BSP_PHY8720_Configure()
 {
     //changePhy(mode);
     DeInitPhy_8720(PHY_ADDRESS_LAN8720_A);

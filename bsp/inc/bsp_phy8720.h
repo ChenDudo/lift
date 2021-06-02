@@ -102,7 +102,7 @@ void PHY8720_GPIO_Config();
 void PHY_LoopBackCmd(uint16_t addr, FunctionalState sta);
 void writePhyConfig(u16 phy_addr);
 void checkPhyStatus(u16 phy_addr);
-void BSP_PHY8720_Configure(u8 mode);
+void BSP_PHY8720_Configure();
 
 
 /// @}

@@ -746,7 +746,11 @@ void LCDC_Init_Reg()
     lcdData(0XB7);   //b7
     
     lcdCmd(0x36);    // Memory Access Control 
-    lcdData(0x28); 
+#if defined(__WIDESCREEN)
+    lcdData(0x28);
+#else
+    //lcdData(0x28); 
+#endif
     
     lcdCmd(0x3A);    //Pixel Format Set
     lcdData(0x55); 
@@ -808,8 +812,11 @@ void LCDC_Init_Reg()
     while(!delay(120)); 
     
     lcdCmd(0x36);
+#if defined(__WIDESCREEN)    
+    lcdData(0x60);
+#else
     lcdData(0x00);
-    //lcdData(0x60); 
+#endif
     
     lcdCmd(0x3A); 
     lcdData(0X05); 
