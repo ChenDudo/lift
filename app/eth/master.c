@@ -133,8 +133,8 @@ void masterSendBroadcast()
     /* data */
     u16 datalen = 3 * sendBCBuf.head[2];
     sendBCBuf.data[0] = msDev.id;
-    sendBCBuf.data[1] = msDev.up;
-    sendBCBuf.data[2] = msDev.dn;
+    sendBCBuf.data[1] = dir;
+    sendBCBuf.data[2] = 0;
 
     /* checksum */
     u16 chsumlen = 0;

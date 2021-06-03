@@ -87,8 +87,8 @@ void decodeFramDat(u8* rvBuff, u16 len)
         revBCFlag = true;
         memcpy((u8*)&revBCBuf1, rvBuff, len);
         rxDev.id = revPtr->data[0];
-        rxDev.up = revPtr->data[1];
-        rxDev.dn = revPtr->data[2];
+        rxDev.up = revPtr->data[1] & 1;
+        rxDev.dn = revPtr->data[1] & 2;
         break;
         case 0x81:
         revBCAckFlag = true;
