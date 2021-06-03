@@ -19,3 +19,9 @@ This workspace include:
 MDM-2803 LCD display has 2 different driver:
 - `__MDM2803_N`: new
 - `__MDM2803`: old 
+--------------------
+
+
+[1] 本项目通信帧定义参见[《呼梯通信帧定义》](.\\app\\eth\\readme.md)
+
+update： 2021/06/03
