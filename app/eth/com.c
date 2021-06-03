@@ -85,11 +85,14 @@ void decodeFramDat(u8* rvBuff, u16 len)
         /*......... broadcast .............*/
         case 0x01:
         revBCFlag = true;
-        getfirstBoardIdx = revPtr->head[0];
+        memcpy((u8*)&revBCBuf1, rvBuff, len);
+        rxDev.id = revPtr->data[0];
+        rxDev.up = revPtr->data[1];
+        rxDev.dn = revPtr->data[2];
         break;
         case 0x81:
         revBCAckFlag = true;
-        getlastBoardIdx = revPtr->head[0];
+        memcpy((u8*)&revBCBuf2, rvBuff, len);
         break;
         
         /*......... heartbeat .............*/
@@ -140,45 +143,47 @@ u16 chksum(void *dataptr, u16 len)
 ////////////////////////////////////////////////////////////////////////////////
 void prepareBroadCastDat(u8 boardidx, u8 mode)
 {
+    u16 headLen = 17;
+    u16 datalen = 0;
+    u16 chsumlen = 0;
+    memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
+    
     /* Head */
-    u16 headLen = sizeof(sendBCBuf.dirAddr) + sizeof(sendBCBuf.srcAddr) +\
-        sizeof(sendBCBuf.FrameType) + sizeof(sendBCBuf.head);
+    /* headLen = sizeof(sendBCBuf.dirAddr) + sizeof(sendBCBuf.srcAddr) + sizeof(sendBCBuf.FrameType) + sizeof(sendBCBuf.head);*/
     memset(sendBCBuf.dirAddr, 0x55, sizeof(sendBCBuf.dirAddr));
     memset(sendBCBuf.srcAddr, 0x66, sizeof(sendBCBuf.srcAddr));
     sendBCBuf.FrameType[0] = 0xAE;
     sendBCBuf.FrameType[1] = 0x88;
-    sendBCType = mode ? (bcType | 0x80) : bcType;
-    sendBCBuf.head[0] = boardidx;       // broadcast idx
-    sendBCBuf.head[1] = sendBCType;           //(ackNeedFlag) ?  (bcType | 0x80) : bcType;
     
     /* data */
-    u16 datalen;
+    /* mode = 1, ack to master(Front node) */
     if (mode){
+        /* if mydev is call up or down, add mydev information to data frame */
         if ((dev_Up || dev_Dn)){
-            datalen = 3 * *(u8*)(saveRevPtr + 16);
-            sendBCBuf.head[2] = *(u8*)(saveRevPtr + 16) + 1;
+            if(revBCBuf2.head[2]){
+                datalen = 3 * revBCBuf2.head[2];
+                memcpy(sendBCBuf.data + 3, revBCBuf2.data, datalen);
+                sendBCBuf.head[2] = revBCBuf2.head[2] + 1;
+            }
+            else
+                sendBCBuf.head[2] = 1;
             sendBCBuf.data[0] = myDev.id;
             sendBCBuf.data[1] = myDev.up;
             sendBCBuf.data[2] = myDev.dn;
-            memcpy(sendBCBuf.data + 3, saveRevPtr + 17, datalen);
             datalen += 3;
         }
-        else {
-            sendBCBuf.head[2] = *(u8*)(saveRevPtr + 16);
-            datalen = 3 * *(u8*)(saveRevPtr + 16);
-            memcpy(sendBCBuf.data, saveRevPtr + 17, datalen);
-        }
-        memset(saveRevPtr, 0x00, sizeof(saveRevPtr));
+        /*else send the next node ack data frame to ack to master(Front node) */
     }
+    /* mode = 0, ack to next node */
     else {
-        datalen = 3 * *(u8*)(revPtr + 16);
-        sendBCBuf.head[2] = *(u8*)(revPtr + 16);        // sub-frame num = 1
-        memcpy(sendBCBuf.data, revPtr + 17, datalen);
-        memset(revPtr, 0x00, sizeof(revPtr));
+        datalen = 3 * revBCBuf1.head[2];
+        memcpy((u8*)&sendBCBuf, (u8*)&revBCBuf1, sizeof(revBCBuf1));
     }
     
+    sendBCBuf.head[0] = boardidx;
+    sendBCBuf.head[1] = mode ? (bcType | 0x80) : bcType;
+    
     /* checksum */
-    u16 chsumlen = 0;
 #if USE_CHECKSUM
     chsumlen = 2;
     u16 checksum = chksum((u8*)&sendBCBuf, headLen + datalen);
@@ -186,9 +191,9 @@ void prepareBroadCastDat(u8 boardidx, u8 mode)
     sendBCBuf.data[datalen+1] = (checksum & 0xFF00) >> 8;
 #endif
     
-    /* copy to ptr */
+    /* copy to sendPtr */
+    memset(sendptr, 0x00, 2*(17+3*MAXDEVICE));
     memcpy(sendptr, (u8*)&sendBCBuf, headLen+datalen+chsumlen);
-    memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
     
     /* Finish */
     preBCFlag = true;
@@ -213,7 +218,9 @@ void broadcastStateMachine()
         case 1:{
             static bool c1first = true;
             if (c1first){
-                myBoardIdx = getfirstBoardIdx + 1;
+                getfirstBoardIdx = revPtr->head[0];
+                if(myBoardIdx == 0)
+                    myBoardIdx = getfirstBoardIdx + 1;
                 sendBoardIdx = (myBoardIdx > saveLastBoardIdx) ? myBoardIdx : saveLastBoardIdx;
                 prepareBroadCastDat(sendBoardIdx, 1);
                 c1first = false;
@@ -260,6 +267,7 @@ void broadcastStateMachine()
         /* state 3: get next node ack signal, overtime retry & change PHYA */
         case 3:{
             if (revBCAckFlag){
+                getlastBoardIdx = revPtr->head[0];
                 saveLastBoardIdx = getlastBoardIdx;
                 memcpy(saveRevPtr, revPtr, 140);
                 broadcastSMState = 4;

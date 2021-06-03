@@ -27,7 +27,9 @@
 #include "common.h"
 
 #include "bsp_led.h"
+#include "bsp_lcd.h"
 #include "bsp_key.h"
+#include "bsp_phy8720.h"
 
 #include "main.h"
 #include "hci.h"
@@ -53,9 +55,16 @@
 void initPara()
 {
     SystemTick_Count = 0;
-    defaultphySelA = 0;
-    BCModeCoutinue = true;
+    defaultphySelA = PHY_ADDRESS_LAN8720_A;
+    
     memset(ledStatus, 0x00, sizeof(ledStatus));
+    memset(saveRevPtr, 0x00, sizeof(saveRevPtr));
+    memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
+
+    text.fore = White;
+    text.back = Black;
+    
+    ready = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +85,9 @@ void initPeri()
         CloseLED();
         while(!delay(200));
     }
+#if defined(__MasterTest)
+    BSP_MASTER_Configure();
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +123,6 @@ int main(void)
 
     initPeri();
     initPara();
-    ready = true;
     
     while (1) {
         hci_task();

@@ -37,8 +37,10 @@
 #include "bsp_key.h"
 #include "bsp_led.h"
 
-//#include "core_cm3.h"
-//#include "intrinsics.h"
+#if defined(__MasterTest)
+#include "master.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////
 /// @addtogroup MM32_Example_Layer
 /// @{
@@ -73,13 +75,9 @@ void hci_task()
         K2Flag = false;
     }
     if(K3Flag){
-        BCModeCoutinue = true;
-        if (BCModeCoutinue) HBModeCoutinue = 0;
         K3Flag = false;
     }
-    if(K4Flag){
-        HBModeCoutinue = true;
-        if (HBModeCoutinue) BCModeCoutinue = 0;
+    if(K4Flag){      
         K4Flag = false;
     }
     

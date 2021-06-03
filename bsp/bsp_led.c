@@ -91,10 +91,16 @@ void LD2_off(void)	{ GPIO_SetBits  (LED2_PORT, LED2_BIT); ledStatus[1] = false; 
 #if defined(LED3_PORT)
 void LD3_on(void)	{ GPIO_ResetBits(LED3_PORT, LED3_BIT); ledStatus[2] = true;  }
 void LD3_off(void)	{ GPIO_SetBits  (LED3_PORT, LED3_BIT); ledStatus[2] = false; }
+#else
+void LD3_on(void)	{ ; }
+void LD3_off(void)	{ ; }
 #endif
 #if defined(LED4_PORT)
 void LD4_on(void)	{ GPIO_ResetBits(LED4_PORT, LED4_BIT); ledStatus[3] = true;  }
 void LD4_off(void)	{ GPIO_SetBits  (LED4_PORT, LED4_BIT); ledStatus[3] = false; }
+#else
+void LD4_on(void)	{ ; }
+void LD4_off(void)	{ ; }
 #endif
 #if defined(LED5_PORT)
 void LD5_on(void)	{ GPIO_ResetBits(LED5_PORT, LED5_BIT); ledStatus[4] = true;  }

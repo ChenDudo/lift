@@ -43,9 +43,18 @@
 #ifdef _MASTER_C_
 #define GLOBAL
 
+GLOBAL u8 MAXFLOOR = 20;
+GLOBAL u8 MINFLOOR = 0;
+GLOBAL bool BCModeCoutinue = true;
+
 #else
 #define GLOBAL extern
 #endif
+
+GLOBAL u8 dir;
+GLOBAL u8 MAXFLOOR;
+GLOBAL u8 MINFLOOR;
+GLOBAL bool BCModeCoutinue;
 
 #undef GLOBAL
 
@@ -57,7 +66,7 @@
 
 void master_task(void);
 void master_tick(void);
-
+void BSP_MASTER_Configure(void);
 
 /// @}
 

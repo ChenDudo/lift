@@ -53,6 +53,8 @@ typedef struct {
 #endif
 
 GLOBAL devType myDev;
+GLOBAL devType rxDev;
+GLOBAL devType msDev;
 GLOBAL bool dev_Up;
 GLOBAL bool dev_Dn;
 

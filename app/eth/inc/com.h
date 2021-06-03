@@ -84,8 +84,6 @@ GLOBAL u8 sendBoardIdx;
 GLOBAL u8 sendBCType; 
 GLOBAL u32 comTick;
 
-GLOBAL bool BCModeCoutinue;
-GLOBAL bool HBModeCoutinue;
 GLOBAL bool preBCFlag;
 GLOBAL bool comTickFlag;
 GLOBAL bool revBCFlag;
@@ -95,6 +93,10 @@ GLOBAL bool revHBAckFlag;
 GLOBAL bool sendBCFinishFlag;
 GLOBAL pbuf* revPtr;
 GLOBAL pbuf sendBCBuf;
+
+//chendo
+GLOBAL pbuf revBCBuf1;
+GLOBAL pbuf revBCBuf2;
 
 #undef GLOBAL
 

@@ -192,6 +192,24 @@ typedef void (*KEY_PRESSING_FUNC)(void);
 
 #endif
 
+#if defined(__LIFT_CALL)
+    #define KEY1_PORT GPIOB
+    #define KEY2_PORT GPIOB
+
+    #define KEY1_BIT GPIO_Pin_1
+    #define KEY2_BIT GPIO_Pin_0
+
+    #define KEY1_VAL ( GPIO_ReadInputDataBit(KEY1_PORT, KEY1_BIT))
+    #define KEY2_VAL (!GPIO_ReadInputDataBit(KEY2_PORT, KEY2_BIT))
+    #define KEY3_VAL 0
+    #define KEY4_VAL 0
+
+    #define KEY1_CONFIG {COMMON_EnableIpClock(emCLOCK_GPIOB);GPIO_Mode_IPD_Init(KEY1_PORT, KEY1_BIT, NO_REMAP, GPIO_AF_0);}
+    #define KEY2_CONFIG {                                    GPIO_Mode_IPU_Init(KEY2_PORT, KEY2_BIT, NO_REMAP, GPIO_AF_0);}
+    #define KEY3_CONFIG {;}
+    #define KEY4_CONFIG {;}
+#endif
+
 #if defined(__MM32_MB032) || defined(__MM32_MB033)
 
     #define KEY1_PORT GPIOA

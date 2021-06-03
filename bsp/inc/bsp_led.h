@@ -180,6 +180,28 @@
 
 #endif
 
+
+#if defined(__LIFT_CALL)
+
+    #define LED1_PORT GPIOF
+    #define LED2_PORT GPIOF
+
+    #define LED1_BIT GPIO_Pin_9
+    #define LED2_BIT GPIO_Pin_8
+
+    #define LED1_CONFIG {COMMON_EnableIpClock(emCLOCK_GPIOF);GPIO_SetBits(LED1_PORT, LED1_BIT); GPIO_Mode_OUT_OD_20MHz_Init(LED1_PORT, LED1_BIT, NO_REMAP, GPIO_AF_0);}
+    #define LED2_CONFIG {COMMON_EnableIpClock(emCLOCK_GPIOF);GPIO_SetBits(LED2_PORT, LED2_BIT); GPIO_Mode_OUT_OD_20MHz_Init(LED2_PORT, LED2_BIT, NO_REMAP, 0xF);}
+    #define LED3_CONFIG {;}
+    #define LED4_CONFIG {;}
+
+    #define RED_LED_ON          LD1_on
+    #define RED_LED_OFF         LD1_off
+    #define GREEN_LED_ON        LD2_on
+    #define GREEN_LED_OFF       LD2_off
+    
+#endif
+
+
 #if defined(__MM32_MB032) || defined(__MM32_MB033)
 
     #define LED1_PORT GPIOA

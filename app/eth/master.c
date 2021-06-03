@@ -27,6 +27,7 @@
 
 #include "mm32_types.h"
 
+#include "bsp_lcd.h"
 #include "com.h"
 #include "eth.h"
 #include "lcd.h"
@@ -45,7 +46,7 @@
 /// @addtogroup UID_Exported_Functions
 /// @{
 
-#define BCPEIROD 100
+#define BCPEIROD 200
 
 devType revDev[MAXDEVICE];
 u32 masterTickCnt;
@@ -61,18 +62,58 @@ void master_task()
 ////////////////////////////////////////////////////////////////////////////////
 void master_tick()
 {
-    static u16 BCCount;
-    if(BCModeCoutinue){
+    static u16 BCCount, dCnt, mFlag;
+    static u16 tick_1s;
+    
+    if (BCModeCoutinue){
         if( ++BCCount > BCPEIROD){
             masterSendBroadcast();
             BCCount = 0;
         }
     }
-    if(masterTickCnt++ >= 100){
+    if (masterTickCnt++ >= 1000){
         masterTickCnt = 0;
+        tick_1s = true;
+        dispMyIdx(msDev.id);
+        
+    }
+    if (dCnt++ > 300){
+        dCnt = 0;
+        mFlag = !mFlag;
         dispIdx(revDev[0].id);
         dispButton(revDev[0].up, revDev[0].dn);
+        mFlag ? dispMyButton(msDev.up, msDev.dn): dispMyButton(0, 0);
     }
+    
+    /* simulate the lift running */
+    if (tick_1s){
+        tick_1s = false;
+        switch (dir){
+            case 1: /* up */
+            if (msDev.id >= MAXFLOOR){
+                dir = 2;
+                return;
+            }
+            msDev.up = 1;
+            msDev.dn = 0;
+            msDev.id ++;
+            break;
+            case 2: /* down */
+            if(msDev.id == MINFLOOR){
+                dir = 1;
+                return;
+            }
+            msDev.up = 0;
+            msDev.dn = 1;
+            msDev.id --;
+            break;
+            default:
+            msDev.up = 0;
+            msDev.dn = 0;
+            break;
+        }
+    }
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -87,10 +128,13 @@ void masterSendBroadcast()
     sendBCBuf.FrameType[1] = 0x88;
     sendBCBuf.head[0] = 0;      // broadcast idx
     sendBCBuf.head[1] = bcType; //(ackNeedFlag) ?  (bcType | 0x80) : bcType;
-    sendBCBuf.head[2] = 0;      // sub-frame num = 1
+    sendBCBuf.head[2] = 1;      // sub-frame num = 1
     
     /* data */
-    u16 datalen = 0;
+    u16 datalen = 3 * sendBCBuf.head[2];
+    sendBCBuf.data[0] = msDev.id;
+    sendBCBuf.data[1] = msDev.up;
+    sendBCBuf.data[2] = msDev.dn;
 
     /* checksum */
     u16 chsumlen = 0;
@@ -116,11 +160,16 @@ void masterDecode()
             revDev[i].id = revPtr->data[i * 3];
             revDev[i].up = revPtr->data[i * 3 + 1];
             revDev[i].dn = revPtr->data[i * 3 + 2];
-            
-            //dispIdx(revDev[i].id);
-            //dispButton(revDev[i].up, revDev[i].dn);
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void BSP_MASTER_Configure()
+{
+    dir = 1;
+    BCModeCoutinue = true;
+    putStr(10, 20, 2, 1, "SIMULATOR");
 }
 
 #endif

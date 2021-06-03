@@ -28,7 +28,7 @@ GLOBAL u16 dy;
 GLOBAL u16 dw;
 GLOBAL u16 dh;
 GLOBAL u16 drawBlockCnt;
-GLOBAL u16 lcdCnt;
+GLOBAL u16 lcdCnt1,lcdCnt2,lcdCnt3;
 #undef GLOBAL
 ////////////////////////////////////////////////////////////////////////////////
 

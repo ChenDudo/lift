@@ -21,14 +21,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 void lcd_tick()
 {
-    dispLED(phyA_Linked, phyB_Linked);
-    
 #if !defined(__MasterTest)
-    if(lcdCnt++ >= 50){
-        lcdCnt = 0;
-        dispIdx(myDev.id);
-        dispMyIdx(myDev.id);
+    static bool toggleFlag;
+    if(lcdCnt1++ >= 50){
+        lcdCnt1 = 0;
         dispMyButton(myDev.up, myDev.dn);
+    }
+    if(lcdCnt2++ >= 250){
+        lcdCnt2 = 0;
+        dispLED(phyA_Linked, phyB_Linked);
+        toggleFlag ? dispButton(rxDev.up, rxDev.dn) : dispButton(0, 0);
+        toggleFlag = !toggleFlag;
+    }
+    if(lcdCnt3++ >= 500){
+        lcdCnt3 = 0;
+        dispIdx(rxDev.id);
+        dispMyIdx(myDev.id);
     }
 #endif
 }
@@ -57,23 +65,23 @@ void dispButton(u8 upflag, u8 dnflag)
     u16 c1 = upflag ? Yellow : Black;
     u16 c2 = dnflag ? Yellow : Black;
     if(WIDTH > HEIGHT){
-        drawTriangle(292, 120 - 10, 20, 30, 0, c1);
-        drawTriangle(292, 120 + 10, 20, 30, 1, c2);
+        drawTriangle(292, HEIGHT/2-10, 20, 30, 0, c1);
+        drawTriangle(292, HEIGHT/2+10, 20, 30, 1, c2);
     }
     else{
-        drawTriangle(WIDTH/2-10, 30, 20, 30, 0, c1);
-        drawTriangle(WIDTH/2-10, HEIGHT - 30, 20, 30, 1, c2);
+        drawTriangle(220, HEIGHT/2-10, 20, 30, 0, c1);
+        drawTriangle(220, HEIGHT/2+20, 20, 30, 1, c2);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void dispMyButton(u8 upflag, u8 dnflag)
 {
-    u16 c1 = upflag ? DarkCyan : Black;
-    u16 c2 = dnflag ? DarkCyan : Black;
+    u16 c1 = upflag ? LightGrey : Black;
+    u16 c2 = dnflag ? LightGrey : Black;
     if(WIDTH > HEIGHT){
-        drawTriangle(292, 120 - 10, 20, 30, 0, c1);
-        drawTriangle(292, 120 + 10, 20, 30, 1, c2);
+        drawTriangle(WIDTH/2-32-30, 40, 20, 30, 0, c1);
+        drawTriangle(WIDTH/2+32+10, 10, 20, 30, 1, c2);
     }
     else{
         drawTriangle(55, 47, 20, 37, 0, c1);
@@ -87,16 +95,16 @@ void dispIdx(u16 idx)
     if(WIDTH > HEIGHT)
         drawNum(72, 66, 1, 2, idx, White);
     else
-        drawNum(32, 120, 1, 2, idx, White);
+        drawNum(32, (HEIGHT-88)/2, 1, 2, idx, White);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void dispMyIdx(u16 idx)
 {
     if(WIDTH > HEIGHT)
-        drawNum(72, 10, 1, 0, idx, DarkGrey);
+        drawNum(WIDTH/2-32, 10, 1, 0, idx, LightGrey);
     else
-        drawNum(88, 10, 1, 0, idx, DarkGrey);
+        drawNum(88, 10, 1, 0, idx, LightGrey);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -258,8 +266,7 @@ void BSP_LCD_Configure()
 	lcdBlcH();
     clearAllScreen();
     
-    text.fore = White;
-    text.back = Black;
+    
     
     //drawMM(20, 155, 20);
 }
