@@ -49,8 +49,10 @@ void dispScreen();
 
 void drawMM(u16 x, u16 y, u16 w);
 void dispIdx(u16 idx);
-void dispLED(u8 phy1, u8 phy2);
+void dispMyIdx(u16 idx);
 void dispButton(u8 upflag, u8 dnflag);
+void dispMyButton(u8 upflag, u8 dnflag);
+void dispLED(u8 phy1, u8 phy2);
 
 void initLcdDemo();
 void refreshLCD(u8 sele,  u16* flag);

@@ -45,7 +45,7 @@
 /// @addtogroup UID_Exported_Functions
 /// @{
 
-#define BCPEIROD 200
+#define BCPEIROD 100
 
 devType revDev[MAXDEVICE];
 u32 masterTickCnt;

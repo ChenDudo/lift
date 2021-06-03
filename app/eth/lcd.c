@@ -27,7 +27,8 @@ void lcd_tick()
     if(lcdCnt++ >= 50){
         lcdCnt = 0;
         dispIdx(myDev.id);
-        dispButton(myDev.up, myDev.dn);
+        dispMyIdx(myDev.id);
+        dispMyButton(myDev.up, myDev.dn);
     }
 #endif
 }
@@ -42,8 +43,8 @@ void dispLED(u8 phy1, u8 phy2)
         x2 = 270;
     }
     else {
-        y1 = 224;
-        x1 = 20;
+        y1 = 304;
+        x1 = 10;
         x2 = 200;
     }
     phy1 ? drawRec (x1,  y1 , 30,  16, Green) : drawRec (x1,  y1 , 30,  16, Red);
@@ -66,12 +67,36 @@ void dispButton(u8 upflag, u8 dnflag)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void dispMyButton(u8 upflag, u8 dnflag)
+{
+    u16 c1 = upflag ? DarkCyan : Black;
+    u16 c2 = dnflag ? DarkCyan : Black;
+    if(WIDTH > HEIGHT){
+        drawTriangle(292, 120 - 10, 20, 30, 0, c1);
+        drawTriangle(292, 120 + 10, 20, 30, 1, c2);
+    }
+    else{
+        drawTriangle(55, 47, 20, 37, 0, c1);
+        drawTriangle(160,10, 20, 37, 1, c2);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void dispIdx(u16 idx)
 {
     if(WIDTH > HEIGHT)
-        drawNum(28, 66, 1, 1, idx);
+        drawNum(72, 66, 1, 2, idx, White);
     else
-        drawNum(15, 120, 1, 0, idx);
+        drawNum(32, 120, 1, 2, idx, White);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void dispMyIdx(u16 idx)
+{
+    if(WIDTH > HEIGHT)
+        drawNum(72, 10, 1, 0, idx, DarkGrey);
+    else
+        drawNum(88, 10, 1, 0, idx, DarkGrey);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

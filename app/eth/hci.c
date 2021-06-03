@@ -96,9 +96,6 @@ void hci_task()
 ////////////////////////////////////////////////////////////////////////////////
 void hci_tick()
 {
-//    for(u8 i = 0; i < 4; i++){
-//        ledStatus[i] = !ledStatus[i];
-//    }
     static u16 hciCnt;
     if (hciCnt++ > 499){
         hciCnt = 0;

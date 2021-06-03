@@ -238,7 +238,6 @@ void broadcastStateMachine()
             if (c2first){
                 phySelA = !phySelA;
                 changePhy(phySelA);
-                //while(!delay(2));
                 sendBoardIdx = myBoardIdx;
                 sendBCType = bcType;
                 prepareBroadCastDat(sendBoardIdx, 0);
@@ -260,23 +259,16 @@ void broadcastStateMachine()
         
         /* state 3: get next node ack signal, overtime retry & change PHYA */
         case 3:{
-            //static u8 retryCnt = 0;
             if (revBCAckFlag){
                 saveLastBoardIdx = getlastBoardIdx;
                 memcpy(saveRevPtr, revPtr, 140);
                 broadcastSMState = 4;
                 revBCAckFlag = false;
             }
-            //else if (comTickFlag){
-            //    comTickFlag = false;
-            //    if (retryCnt ++ < 2)
-            //        prepareBroadCastDat(sendBoardIdx, sendBCType);
-            //}
             if (comTick > BCOVERTIME){
                 SMERROR = revNextError;
                 broadcastSMState = 4;
                 comTick = 0;
-                //retryCnt = 0;
             }
         }
         break;
@@ -287,7 +279,6 @@ void broadcastStateMachine()
             if (c4first){
                 phySelA = defaultphySelA;
                 changePhy(phySelA);
-                //while(!delay(2));
                 c4first = false;
             }
             if (phyLink_Flag){

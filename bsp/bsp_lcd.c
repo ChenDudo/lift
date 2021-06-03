@@ -410,6 +410,27 @@ void drawDSEG_72_80(u16 x, u16 y, u8 bc, u8 idx)
     }
 }
 
+/* 32 * 37*/
+////////////////////////////////////////////////////////////////////////////////
+void drawDSEG_32_37(u16 x, u16 y, u8 bc, u8 idx, u16 fore) 
+{
+    u16 k = idx;
+    for (u16 i = 0; i < 148; i++) {
+        for (u16 j = 0; j < 8; j++){
+            u16 tempXLoc = (i*8 + j) % 32 ;
+            u16 tempYLoc = (i*8 + j) / 32 ;
+            if (DSEG_32_37[k][i] & (0x01 << (7-j))){
+                drawPoint(x + tempXLoc, y + tempYLoc, fore);
+            }
+            else{
+                if (bc) {
+                    drawPoint(x + tempXLoc, y + tempYLoc, text.back);
+                }
+            }
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 void drawTriangle(u16 x, u16 y, u16 w, u16 h, u16 md, u16 c)
 {
@@ -428,43 +449,43 @@ void drawTriangle(u16 x, u16 y, u16 w, u16 h, u16 md, u16 c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num) 
+void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num, u16 fore) 
 {
-    if (mode){
-        u16 x1 = x, x2 = x + 88, x3 = x + 176;
+    u16 x1 = x, x2;
+    switch (mode){
+        case 0:{
+        x2 = x1 + 32;
         if (num >= 0 && num <= 9) {
-            drawDSEG_88_107(x1, y, bc, 0);
-            drawDSEG_88_107(x2, y, bc, 0);
-            drawDSEG_88_107(x3, y, bc, num);
+            drawDSEG_32_37(x1, y, bc, 0, fore);
+            drawDSEG_32_37(x2, y, bc, num, fore);
         }
         if (num >= 9 && num <= 99) {
-            drawDSEG_88_107(x1, y, bc, 0);
-            drawDSEG_88_107(x2, y, bc, num / 10);
-            drawDSEG_88_107(x3, y, bc, num % 10);
-        }
-        if (num >= 99 && num <= 999) {
-            drawDSEG_88_107(x1, y, bc, num / 100);
-            drawDSEG_88_107(x2, y, bc, (num % 100) / 10);
-            drawDSEG_88_107(x3, y, bc, num % 10);
-        }
-    }
-    else {
-        u16 x1 = x, x2 = x + 72, x3 = x + 144;
+            drawDSEG_32_37(x1, y, bc, num / 10, fore);
+            drawDSEG_32_37(x2, y, bc, num % 10, fore);
+        }}
+        break;
+        case 1:{
+        x2 = x1 + 72;
         if (num >= 0 && num <= 9) {
             drawDSEG_72_80(x1, y, bc, 0);
-            drawDSEG_72_80(x2, y, bc, 0);
-            drawDSEG_72_80(x3, y, bc, num);
+            drawDSEG_72_80(x2, y, bc, num);
         }
         if (num >= 9 && num <= 99) {
-            drawDSEG_72_80(x1, y, bc, 0);
-            drawDSEG_72_80(x2, y, bc, num / 10);
-            drawDSEG_72_80(x3, y, bc, num % 10);
+            drawDSEG_72_80(x1, y, bc, num / 10);
+            drawDSEG_72_80(x2, y, bc, num % 10);
+        }}
+        break;
+        default:{
+        x2 = x1 + 88;
+        if (num >= 0 && num <= 9) {
+            drawDSEG_88_107(x1, y, bc, 0);
+            drawDSEG_88_107(x2, y, bc, num);
         }
-        if (num >= 99 && num <= 999) {
-            drawDSEG_72_80(x1, y, bc, num / 100);
-            drawDSEG_72_80(x2, y, bc, (num % 100) / 10);
-            drawDSEG_72_80(x3, y, bc, num % 10);
-        }
+        if (num >= 9 && num <= 99) {
+            drawDSEG_88_107(x1, y, bc, num / 10);
+            drawDSEG_88_107(x2, y, bc, num % 10);
+        }}
+        break;
     }
 }
 
