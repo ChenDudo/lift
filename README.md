@@ -22,6 +22,6 @@ MDM-2803 LCD display has 2 different driver:
 --------------------
 
 
-[1] 本项目通信帧定义参见[《呼梯通信帧定义》](.\\app\\eth\\readme.md)
+[1] 本项目通信帧定义参见[《呼梯通信帧定义》](.//app//eth//readme.md)
 
 update： 2021/06/03
