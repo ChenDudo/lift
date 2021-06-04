@@ -89,10 +89,12 @@ void decodeFramDat(u8* rvBuff, u16 len)
         rxDev.id = revPtr->data[0];
         rxDev.up = revPtr->data[1] & 1;
         rxDev.dn = revPtr->data[1] & 2;
+        getfirstBoardIdx = revPtr->head[0];
         break;
         case 0x81:
         revBCAckFlag = true;
         memcpy((u8*)&revBCBuf2, rvBuff, len);
+        getlastBoardIdx = revPtr->head[0];
         break;
         
         /*......... heartbeat .............*/
@@ -173,11 +175,18 @@ void prepareBroadCastDat(u8 boardidx, u8 mode)
             datalen += 3;
         }
         /*else send the next node ack data frame to ack to master(Front node) */
+        else{
+            if(revBCBuf2.head[2]){
+                datalen = 3 * revBCBuf2.head[2];
+                memcpy(sendBCBuf.data, revBCBuf2.data, datalen);
+                sendBCBuf.head[2] = revBCBuf2.head[2];
+            }
+        }
     }
     /* mode = 0, ack to next node */
     else {
         datalen = 3 * revBCBuf1.head[2];
-        memcpy((u8*)&sendBCBuf, (u8*)&revBCBuf1, sizeof(revBCBuf1));
+        memcpy((u8*)&sendBCBuf, (u8*)&revBCBuf1, headLen+datalen);
     }
     
     sendBCBuf.head[0] = boardidx;
@@ -192,7 +201,7 @@ void prepareBroadCastDat(u8 boardidx, u8 mode)
 #endif
     
     /* copy to sendPtr */
-    memset(sendptr, 0x00, 2*(17+3*MAXDEVICE));
+    memset(sendptr, 0x00, 316);
     memcpy(sendptr, (u8*)&sendBCBuf, headLen+datalen+chsumlen);
     
     /* Finish */
@@ -218,9 +227,7 @@ void broadcastStateMachine()
         case 1:{
             static bool c1first = true;
             if (c1first){
-                getfirstBoardIdx = revPtr->head[0];
-                if(myBoardIdx == 0)
-                    myBoardIdx = getfirstBoardIdx + 1;
+                myBoardIdx = getfirstBoardIdx + 1;
                 sendBoardIdx = (myBoardIdx > saveLastBoardIdx) ? myBoardIdx : saveLastBoardIdx;
                 prepareBroadCastDat(sendBoardIdx, 1);
                 c1first = false;
@@ -269,9 +276,7 @@ void broadcastStateMachine()
         /* state 3: get next node ack signal, overtime retry & change PHYA */
         case 3:{
             if (revBCAckFlag){
-                getlastBoardIdx = revPtr->head[0];
                 saveLastBoardIdx = getlastBoardIdx;
-                memcpy(saveRevPtr, revPtr, 140);
                 broadcastSMState = 4;
                 revBCAckFlag = false;
             }

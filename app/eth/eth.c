@@ -69,14 +69,35 @@ void eth_task()
 ////////////////////////////////////////////////////////////////////////////////
 void eth_tick()
 {
-    ledStatus[2] = phyLink_Flag;
     //phyLink_Flag ? checkPhyStatus(phySelA) : writePhyConfig(phySelA);
-    checkPhyStatus(phySelA);
+    static u16 ethCnt;
+    if (ethCnt++ > 9){
+        ethCnt = 0;
+        checkPhyStatus(phySelA);
+    }
     
-    if (!phySelA)
-        phyA_Linked = phyLink_Flag ? true : false;
-    if (phySelA)
-        phyB_Linked = phyLink_Flag ? true : false;
+    if (!phySelA) {
+        if (phyLink_Flag){
+            phyA_Linking = true;
+            phyA_Linked = true;
+            phyA_LinkCnt = 2000;
+        }
+        else
+            phyA_Linking = false;
+    }
+    if (phySelA) {
+        if (phyLink_Flag){
+            phyB_Linking = true;
+            phyB_Linked = true;
+            phyB_LinkCnt = 2000;
+        }
+        else
+            phyB_Linking = false;
+    }
+    if (--phyA_LinkCnt == 0)
+        phyA_Linked = false;
+    if (--phyB_LinkCnt == 0)
+        phyB_Linked = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

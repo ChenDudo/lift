@@ -29,7 +29,7 @@
 /// @{
 
 #define USE_CHECKSUM    0
-#define BCOVERTIME      20
+#define BCOVERTIME      50
 #define MAXDEVICE       100
 
 typedef enum {
@@ -74,7 +74,6 @@ typedef struct {
 GLOBAL u8 myBoardIdx;
 GLOBAL u8 saveLastBoardIdx;
 GLOBAL u8 sendptr[17+3*MAXDEVICE];
-GLOBAL u8 saveRevPtr[17+3*MAXDEVICE];
 GLOBAL u8 broadcastSMState;
 GLOBAL u8 heartBeatSMState;
 GLOBAL ErrorCodeNum SMERROR;

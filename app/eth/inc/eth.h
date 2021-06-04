@@ -46,13 +46,17 @@
 #endif
 
 GLOBAL bool phySelA;
+GLOBAL bool ethIT_R_flag;
+GLOBAL bool phyA_Linking;
+GLOBAL bool phyB_Linking;
 GLOBAL bool phyA_Linked;
 GLOBAL bool phyB_Linked;
 GLOBAL bool defaultphySelA;
-GLOBAL bool ethIT_R_flag,loopBackFlag;
 
 GLOBAL u16 receiveLen;
 GLOBAL u8* receiveStr;
+GLOBAL u16 phyA_LinkCnt;
+GLOBAL u16 phyB_LinkCnt;
 
 #undef GLOBAL
 

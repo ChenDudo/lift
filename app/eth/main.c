@@ -58,13 +58,10 @@ void initPara()
     defaultphySelA = PHY_ADDRESS_LAN8720_A;
     
     memset(ledStatus, 0x00, sizeof(ledStatus));
-    memset(saveRevPtr, 0x00, sizeof(saveRevPtr));
     memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
 
     text.fore = White;
     text.back = Black;
-    
-    ready = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +120,7 @@ int main(void)
 
     initPeri();
     initPara();
+    ready = true;
     
     while (1) {
         hci_task();

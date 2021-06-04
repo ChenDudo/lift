@@ -766,7 +766,7 @@ void LCDC_Init_Reg()
 #if defined(__WIDESCREEN)
     lcdData(0x28);
 #else
-    //lcdData(0x28); 
+    lcdData(0x48); 
 #endif
     
     lcdCmd(0x3A);    //Pixel Format Set
