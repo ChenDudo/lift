@@ -46,7 +46,7 @@
 /// @addtogroup UID_Exported_Functions
 /// @{
 
-#define BCPEIROD 60
+#define BCPEIROD 2
 
 devType revDev[MAXDEVICE];
 u32 masterTickCnt;
@@ -71,11 +71,11 @@ void master_tick()
     
     if (BCModeCoutinue){
         if( ++BCCount > BCPEIROD){
-            masterSendBroadcast();
+            
             BCCount = 0;
         }
     }
-    
+    masterSendBroadcast();
     if (dCnt++ > 50){
         dCnt = 0;
     }

@@ -29,7 +29,7 @@
 /// @{
 
 #define USE_CHECKSUM    0
-#define BCOVERTIME      50
+#define BCOVERTIME      45
 #define MAXDEVICE       100
 
 typedef enum {
