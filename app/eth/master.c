@@ -46,7 +46,7 @@
 /// @addtogroup UID_Exported_Functions
 /// @{
 
-#define BCPEIROD 200
+#define BCPEIROD 100
 
 devType revDev[MAXDEVICE];
 u32 masterTickCnt;
@@ -62,7 +62,7 @@ void master_task()
 ////////////////////////////////////////////////////////////////////////////////
 void master_tick()
 {
-    static u16 BCCount, dCnt, mFlag;
+    static u16 BCCount, dCnt, eCnt, fCnt, mFlag;
     static u16 tick_1s;
     
     if (BCModeCoutinue){
@@ -74,17 +74,22 @@ void master_tick()
     if (masterTickCnt++ >= 1000){
         masterTickCnt = 0;
         tick_1s = true;
-        dispMyIdx(msDev.id);
-        
     }
-    if (dCnt++ > 300){
+    if (dCnt++ > 50){
         dCnt = 0;
         mFlag = !mFlag;
         dispIdx(revDev[0].id);
         dispButton(revDev[0].up, revDev[0].dn);
+    }
+    if (eCnt++ > 250){
+        eCnt = 0;
         mFlag ? dispMyButton(msDev.up, msDev.dn): dispMyButton(0, 0);
     }
-    
+    if (fCnt++ > 500){
+        fCnt = 0;
+        dispMyIdx(msDev.id);
+        dispLED(phyA_Linked, phyB_Linked);
+    }
     /* simulate the lift running */
     if (tick_1s){
         tick_1s = false;
