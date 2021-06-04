@@ -52,9 +52,11 @@ GLOBAL bool BCModeCoutinue = true;
 #endif
 
 GLOBAL u8 dir;
+GLOBAL u8 rxFloorCnt;
 GLOBAL u8 MAXFLOOR;
 GLOBAL u8 MINFLOOR;
 GLOBAL bool BCModeCoutinue;
+GLOBAL u16 iTick;
 
 #undef GLOBAL
 

@@ -23,17 +23,17 @@ void lcd_tick()
 {
 #if !defined(__MasterTest)
     static bool toggleFlag;
-    if(lcdCnt1++ >= 50){
+    if(lcdCnt1++ > 50){
         lcdCnt1 = 0;
         dispMyButton(myDev.up, myDev.dn);
         dispIdx(rxDev.id);
     }
-    if(lcdCnt2++ >= 250){
+    if(lcdCnt2++ > 250){
         lcdCnt2 = 0;
         toggleFlag = !toggleFlag;
         toggleFlag ? dispButton(rxDev.up, rxDev.dn) : dispButton(0, 0);
     }
-    if(lcdCnt3++ >= 500){
+    if(lcdCnt3++ > 500){
         lcdCnt3 = 0;
         dispMyIdx(myDev.id);
         dispLED(phyA_Linked, phyB_Linked);

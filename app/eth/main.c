@@ -127,7 +127,7 @@ int main(void)
         eth_task();
         com_task();
         device_task();
-#if defined(__MasterTest)        
+#if defined(__MasterTest)
         master_task();
 #endif
     }

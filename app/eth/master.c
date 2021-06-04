@@ -46,24 +46,28 @@
 /// @addtogroup UID_Exported_Functions
 /// @{
 
-#define BCPEIROD 100
+#define BCPEIROD 60
 
 devType revDev[MAXDEVICE];
 u32 masterTickCnt;
 void masterSendBroadcast();
 void masterDecode();
+void loopDisplayRxFLoor();
 
 ////////////////////////////////////////////////////////////////////////////////
 void master_task()
 {
-    masterDecode();
+    //masterDecode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void master_tick()
 {
-    static u16 BCCount, dCnt, eCnt, fCnt, mFlag;
+    static u16 BCCount, dCnt, eCnt, fCnt;
+    static bool mFlag;
     static u16 tick_1s;
+    
+    masterDecode();
     
     if (BCModeCoutinue){
         if( ++BCCount > BCPEIROD){
@@ -71,25 +75,27 @@ void master_tick()
             BCCount = 0;
         }
     }
-    if (masterTickCnt++ >= 1000){
-        masterTickCnt = 0;
-        tick_1s = true;
-    }
+    
     if (dCnt++ > 50){
         dCnt = 0;
-        mFlag = !mFlag;
-        dispIdx(revDev[0].id);
-        dispButton(revDev[0].up, revDev[0].dn);
     }
     if (eCnt++ > 250){
         eCnt = 0;
-        mFlag ? dispMyButton(msDev.up, msDev.dn): dispMyButton(0, 0);
+        dispMyIdx(msDev.id);
     }
     if (fCnt++ > 500){
         fCnt = 0;
-        dispMyIdx(msDev.id);
         dispLED(phyA_Linked, phyB_Linked);
+        
+        mFlag = !mFlag;
+        mFlag ? dispMyButton(msDev.up, msDev.dn): dispMyButton(0, 0);
     }
+    if (masterTickCnt++ >= 1000){
+        masterTickCnt = 0;
+        tick_1s = true;
+        loopDisplayRxFLoor();
+    }
+    
     /* simulate the lift running */
     if (tick_1s){
         tick_1s = false;
@@ -119,6 +125,24 @@ void master_tick()
         }
     }
     
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void loopDisplayRxFLoor()
+{
+    if (rxFloorCnt <= 1){
+        dispIdx(revDev[0].id);
+        dispButton(revDev[0].up, revDev[0].dn);
+    }
+    else {
+        if (iTick < rxFloorCnt) {
+            dispIdx(revDev[iTick].id);
+            dispButton(revDev[iTick].up, revDev[iTick].dn);
+            iTick ++;
+            if (iTick >= rxFloorCnt)
+                iTick = 0;
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -160,8 +184,8 @@ void masterSendBroadcast()
 void masterDecode()
 {
     if (revBCAckFlag){
-        u8 datLen = revPtr->head[2];
-        for(u8 i = 0; i <= datLen; i++){
+        rxFloorCnt = revPtr->head[2];
+        for(u8 i = 0; i <= rxFloorCnt; i++){
             revDev[i].id = revPtr->data[i * 3];
             revDev[i].up = revPtr->data[i * 3 + 1];
             revDev[i].dn = revPtr->data[i * 3 + 2];
