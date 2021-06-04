@@ -232,6 +232,7 @@ void broadcastStateMachine()
             }
             else if (comTick > BCOVERTIME) {
                 SMERROR = sendAckError;
+                preBCFlag = false;
                 broadcastSMState = 0;
                 comTick = 0;
                 c1first = true;
@@ -257,6 +258,7 @@ void broadcastStateMachine()
             }
             else if (comTick > BCOVERTIME){
                 SMERROR = changePhyError;
+                preBCFlag = false;
                 broadcastSMState = 4;
                 comTick = 0;
                 c2first = true;
@@ -274,6 +276,7 @@ void broadcastStateMachine()
                 revBCAckFlag = false;
             }
             if (comTick > BCOVERTIME){
+                preBCFlag = false;
                 SMERROR = revNextError;
                 broadcastSMState = 4;
                 comTick = 0;
