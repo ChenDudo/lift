@@ -185,6 +185,7 @@
           <state>__MM3U1</state>
           <state>__MM32_MB039</state>
           <state>__MDM2803_N</state>
+          <state>_WIDESCREEN</state>
           <state>CLOCK=8000000</state>
         </option>
         <option>
@@ -1164,8 +1165,8 @@
           <state>__IAR</state>
           <state>__MM3U1</state>
           <state>__MM32_MB036</state>
-          <state>__MDM2803</state>
-          <state>__WIDESCREEN</state>
+          <state>__MDM2803_N</state>
+          <state>_WIDESCREEN</state>
           <state>CLOCK=8000000</state>
           <state>__MasterTest</state>
         </option>

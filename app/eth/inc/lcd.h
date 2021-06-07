@@ -48,7 +48,7 @@ void menuTIME(u8 idx, u8 sta, u8 sel);
 void dispScreen();
 
 void drawMM(u16 x, u16 y, u16 w);
-void dispIdx(u16 idx);
+void dispIdx(u16 idx, u16 c);
 void dispMyIdx(u16 idx);
 void dispButton(u8 upflag, u8 dnflag);
 void dispMyButton(u8 upflag, u8 dnflag);

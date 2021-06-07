@@ -70,6 +70,7 @@ GLOBAL bool dev_Dn;
 
 void device_task();
 void device_tick();
+void BSP_Device_Configure();
 
 /// @}
 

@@ -28,8 +28,8 @@
 #include "com.h"
 #include "eth.h"
 
-
-
+#include "bsp_beep.h"
+#include "common.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @addtogroup MM32_Example_Layer
@@ -53,10 +53,42 @@ void device_task()
     myDev.dn = dev_Dn;
 }
 
+u16 beepOpenTime;
 ////////////////////////////////////////////////////////////////////////////////
 void device_tick()
 {
-    
+    if (myDev.up){
+        if ((rxDev.id == myDev.id) && rxDev.up){
+            beepOpenTime = 100;
+            dev_Up = false;
+        }
+    }
+    if (myDev.dn){
+        if ((rxDev.id == myDev.id) && rxDev.dn){
+            beepOpenTime = 100;
+            dev_Dn = false;
+        }
+    }
+    if (beepOpenTime > 0){
+        BEEP_on(1300);
+        beepOpenTime--;
+    }
+    else {
+        BEEP_off();
+        beepOpenTime = 0;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void BSP_Device_Configure()
+{
+    BSP_BEEP_Configure(1000);
+    for(u8 i = 0; i < 2; i++){
+        BEEP_on(1000);
+        while(!delay(50));
+        BEEP_off();
+        while(!delay(200));
+    }
 }
 
 

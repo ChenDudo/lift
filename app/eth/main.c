@@ -74,6 +74,7 @@ void initPeri()
     BSP_KeyFuncSet(3, Key3Down, Key3Pressing);
     BSP_KeyFuncSet(4, Key4Down, Key4Pressing);
     BSP_LED_Configure();
+    BSP_Device_Configure();
     ETH_Configure();
     
     for(u8 i = 0; i < 2; i++){
@@ -99,10 +100,11 @@ void AppTaskTick()
         tickCnt = 0;
     }
     if(ready){
-        hci_tick();
+        hci_tick();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         eth_tick();
         com_tick();
         lcd_tick();
+        device_tick();
 #if defined(__MasterTest)
         master_tick();
 #endif

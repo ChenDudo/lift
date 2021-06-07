@@ -61,6 +61,46 @@ void master_task()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void dispMasterLED(u8 phy)
+{
+    u16 x2 = (WIDTH - 30)/2;
+    u16 y2 = 302;
+    phy ? drawRec (x2, y2, 30,  16, Green) : drawRec (x2, y2, 30,  16, Red);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void dispMasterRxIdx(u16 idx)
+{
+    drawNum(WIDTH/2-88, (HEIGHT-107)/2, 1, 2, idx, White);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void dispMasterRxButton(u8 upflag, u8 dnflag)
+{
+    u16 c1 = upflag ? White : Black;
+    u16 c2 = dnflag ? White : Black;
+
+    drawTriangle(220, HEIGHT/2-10, 20, 30, 0, c1);
+    drawTriangle(220, HEIGHT/2+10, 20, 30, 1, c2);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void dispMasterMyIdx(u16 idx)
+{
+    drawNum(0, 320-40, 1, 0, idx, Yellow);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void dispMasterMyButton(u8 upflag, u8 dnflag)
+{
+    u16 c1 = upflag ? Yellow : Black;
+    u16 c2 = dnflag ? Yellow : Black;
+
+    drawTriangle((WIDTH-100)/2, HEIGHT/2-90, 100, 40, 0, c1);
+    drawTriangle((WIDTH-100)/2, HEIGHT/2+90, 100, 40, 1, c2);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void master_tick()
 {
     static u16 BCCount, dCnt, eCnt, fCnt;
@@ -71,7 +111,6 @@ void master_tick()
     
     if (BCModeCoutinue){
         if( ++BCCount > BCPEIROD){
-            
             BCCount = 0;
         }
     }
@@ -81,19 +120,19 @@ void master_tick()
     }
     if (eCnt++ > 250){
         eCnt = 0;
-        dispMyIdx(msDev.id);
+        dispMasterMyIdx(msDev.id);
+        mFlag = !mFlag;
+        mFlag ? dispMasterMyButton(msDev.up, msDev.dn): dispMasterMyButton(0, 0);
     }
     if (fCnt++ > 500){
         fCnt = 0;
-        dispLED(phyA_Linked, phyB_Linked);
-        
-        mFlag = !mFlag;
-        mFlag ? dispMyButton(msDev.up, msDev.dn): dispMyButton(0, 0);
+        dispMasterLED(phyA_Linked);
+        loopDisplayRxFLoor();
     }
-    if (masterTickCnt++ >= 1000){
+    if (masterTickCnt++ >= 1500){
         masterTickCnt = 0;
         tick_1s = true;
-        loopDisplayRxFLoor();
+        MAXFLOOR = getlastBoardIdx;
     }
     
     /* simulate the lift running */
@@ -131,13 +170,13 @@ void master_tick()
 void loopDisplayRxFLoor()
 {
     if (rxFloorCnt <= 1){
-        dispIdx(revDev[0].id);
-        dispButton(revDev[0].up, revDev[0].dn);
+        dispMasterRxIdx(revDev[0].id);
+        dispMasterRxButton(revDev[0].up, revDev[0].dn);
     }
     else {
         if (iTick < rxFloorCnt) {
-            dispIdx(revDev[iTick].id);
-            dispButton(revDev[iTick].up, revDev[iTick].dn);
+            dispMasterRxIdx(revDev[iTick].id);
+            dispMasterRxButton(revDev[iTick].up, revDev[iTick].dn);
             iTick ++;
             if (iTick >= rxFloorCnt)
                 iTick = 0;

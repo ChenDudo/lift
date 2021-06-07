@@ -26,10 +26,10 @@ void lcd_tick()
     if(lcdCnt1++ > 50){
         lcdCnt1 = 0;
         dispMyButton(myDev.up, myDev.dn);
-        dispIdx(rxDev.id);
     }
     if(lcdCnt2++ > 250){
         lcdCnt2 = 0;
+        dispIdx(rxDev.id, Yellow);
         toggleFlag = !toggleFlag;
         toggleFlag ? dispButton(rxDev.up, rxDev.dn) : dispButton(0, 0);
     }
@@ -44,19 +44,21 @@ void lcd_tick()
 ////////////////////////////////////////////////////////////////////////////////
 void dispLED(u8 phy1, u8 phy2)
 {
-    static u16 x1,x2,y1;
+    static u16 x1,x2,y1,y2;
     if (WIDTH > HEIGHT){
         y1 = 224;
         x1 = 20;
         x2 = 270;
+        y2 = y1;
     }
     else {
-        y1 = 304;
-        x1 = 10;
-        x2 = 200;
+        x1 = (WIDTH - 30)/2;
+        x2 = x1;
+        y1 = 2;
+        y2 = 302;
     }
     phy1 ? drawRec (x1,  y1 , 30,  16, Green) : drawRec (x1,  y1 , 30,  16, Red);
-    phy2 ? drawRec (x2,  y1 , 30,  16, Green) : drawRec (x2,  y1 , 30,  16, Red);
+    phy2 ? drawRec (x2,  y2 , 30,  16, Green) : drawRec (x2,  y2 , 30,  16, Red);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -69,33 +71,36 @@ void dispButton(u8 upflag, u8 dnflag)
         drawTriangle(292, HEIGHT/2+10, 20, 30, 1, c2);
     }
     else{
-        drawTriangle(220, HEIGHT/2-10, 20, 30, 0, c1);
-        drawTriangle(220, HEIGHT/2+20, 20, 30, 1, c2);
+        drawTriangle(WIDTH - 40, HEIGHT/2-25, 20, 20, 0, c1);
+        drawTriangle(WIDTH - 40, HEIGHT/2+25, 20, 20, 1, c2);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void dispMyButton(u8 upflag, u8 dnflag)
 {
-    u16 c1 = upflag ? LightGrey : Black;
-    u16 c2 = dnflag ? LightGrey : Black;
+    u16 c1 = upflag ? White : Black;
+    u16 c2 = dnflag ? White : Black;
     if(WIDTH > HEIGHT){
         drawTriangle(WIDTH/2-32-30, 40, 20, 30, 0, c1);
         drawTriangle(WIDTH/2+32+10, 10, 20, 30, 1, c2);
     }
     else{
-        drawTriangle(55, 47, 20, 37, 0, c1);
-        drawTriangle(160,10, 20, 37, 1, c2);
+        //drawTriangle(55, 47, 20, 37, 0, c1);
+        //drawTriangle(160,10, 20, 37, 1, c2);
+        drawTriangle(WIDTH/2-40, HEIGHT/2-10, 80, 100, 0, c1);
+        drawTriangle(WIDTH/2-40, HEIGHT/2+10, 80, 100, 1, c2);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void dispIdx(u16 idx)
+void dispIdx(u16 idx, u16 c)
 {
     if(WIDTH > HEIGHT)
-        drawNum(72, 66, 1, 2, idx, White);
-    else
-        drawNum(32, (HEIGHT-88)/2, 1, 2, idx, White);
+        drawNum(72, 66, 1, 2, idx, c);
+    else {
+        drawNum(WIDTH - 64, (HEIGHT-32)/2, 1, 0, idx, c);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +109,7 @@ void dispMyIdx(u16 idx)
     if(WIDTH > HEIGHT)
         drawNum(WIDTH/2-32, 10, 1, 0, idx, LightGrey);
     else
-        drawNum(88, 10, 1, 0, idx, LightGrey);
+        drawNum(0, (HEIGHT-32)/2, 1, 0, idx, White);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
