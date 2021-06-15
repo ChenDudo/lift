@@ -879,7 +879,7 @@ void LCDC_Init_Reg()
 #if defined(__WIDESCREEN)    
     lcdData(0x60);
 #else
-    lcdData(0x00);
+    lcdData(0xC0);
 #endif
     
     lcdCmd(0x3A); 

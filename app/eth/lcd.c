@@ -89,8 +89,8 @@ void dispMyButton(u8 upflag, u8 dnflag)
     else{
         //drawTriangle(55, 47, 20, 37, 0, c1);
         //drawTriangle(160,10, 20, 37, 1, c2);
-        drawTriangle(WIDTH/2-50, HEIGHT/2-10, 100, 100, 0, c1);
-        drawTriangle(WIDTH/2-50, HEIGHT/2+10, 100, 100, 1, c2);
+        drawTriangle(WIDTH/2-50, HEIGHT/2-20, 100, 100, 0, c1);
+        drawTriangle(WIDTH/2-50, HEIGHT/2+20, 100, 100, 1, c2);
     }
 }
 
@@ -116,26 +116,24 @@ void dispMyIdx(u16 idx)
 ////////////////////////////////////////////////////////////////////////////////
 void clearLeftScreen()
 {
-	drawRec (dx , dy , dw, dh + 95, White);
+	drawRec (dx , dy , dw, dh + 95, text.back);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void clearAllScreen()
 {
-	drawRec (0 , 0 , WIDTH, HEIGHT, White);
+	drawRec (0 , 0 , WIDTH, HEIGHT, text.back);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void clearButtomScreen()
 {
-	drawRec (dx , dy + dh + 95 , dw, 240, White);
+	drawRec (dx , dy + dh + 95 , dw, 240, text.back);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void dispScreen()
 {
-	text.fore = White;
-	text.back = Black;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -155,6 +153,7 @@ void BSP_LCD_Configure()
 	LCDC_Init_Reg();
 	lcdFillColor(White);
 	lcdBlcH();
+    clearAllScreen();
 }
 
 #endif
