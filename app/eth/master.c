@@ -77,8 +77,8 @@ void dispMasterRxIdx(u16 idx)
 ////////////////////////////////////////////////////////////////////////////////
 void dispMasterRxButton(u8 upflag, u8 dnflag)
 {
-    u16 c1 = upflag ? White : Black;
-    u16 c2 = dnflag ? White : Black;
+    u16 c1 = upflag ? Black : White;
+    u16 c2 = dnflag ? Black : White;
 
     drawTriangle(220, HEIGHT/2-10, 20, 30, 0, c1);
     drawTriangle(220, HEIGHT/2+10, 20, 30, 1, c2);
@@ -87,14 +87,14 @@ void dispMasterRxButton(u8 upflag, u8 dnflag)
 ////////////////////////////////////////////////////////////////////////////////
 void dispMasterMyIdx(u16 idx)
 {
-    drawNum(0, 320-40, 1, 0, idx, Yellow);
+    drawNum(0, 320-40, 1, 0, idx, Blue);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void dispMasterMyButton(u8 upflag, u8 dnflag)
 {
-    u16 c1 = upflag ? Yellow : Black;
-    u16 c2 = dnflag ? Yellow : Black;
+    u16 c1 = upflag ? Yellow : White;
+    u16 c2 = dnflag ? Yellow : White;
 
     drawTriangle((WIDTH-100)/2, HEIGHT/2-90, 100, 40, 0, c1);
     drawTriangle((WIDTH-100)/2, HEIGHT/2+90, 100, 40, 1, c2);
@@ -237,7 +237,7 @@ void BSP_MASTER_Configure()
 {
     dir = 1;
     BCModeCoutinue = true;
-    putStr(10, 20, 2, 1, "SIMULATOR");
+    //putStr(10, 20, 2, 1, "SIMULATOR");
 }
 
 #endif

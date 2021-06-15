@@ -29,7 +29,7 @@ void lcd_tick()
     }
     if(lcdCnt2++ > 250){
         lcdCnt2 = 0;
-        dispIdx(rxDev.id, Yellow);
+        dispIdx(rxDev.id, Blue);
         toggleFlag = !toggleFlag;
         toggleFlag ? dispButton(rxDev.up, rxDev.dn) : dispButton(0, 0);
     }
@@ -57,15 +57,16 @@ void dispLED(u8 phy1, u8 phy2)
         y1 = 2;
         y2 = 302;
     }
-    phy1 ? drawRec (x1,  y1 , 30,  16, Green) : drawRec (x1,  y1 , 30,  16, Red);
-    phy2 ? drawRec (x2,  y2 , 30,  16, Green) : drawRec (x2,  y2 , 30,  16, Red);
+
+    phy1 ? drawRoundRec (x1,  y1 , 40,  17, Green) : drawRoundRec (x1,  y1 , 40,  17, Red);
+    phy2 ? drawRoundRec (x2,  y2 , 40,  17, Green) : drawRoundRec (x2,  y2 , 40,  17, Red);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void dispButton(u8 upflag, u8 dnflag)
 {
-    u16 c1 = upflag ? Yellow : Black;
-    u16 c2 = dnflag ? Yellow : Black;
+    u16 c1 = upflag ? Yellow : White;
+    u16 c2 = dnflag ? Yellow : White;
     if(WIDTH > HEIGHT){
         drawTriangle(292, HEIGHT/2-10, 20, 30, 0, c1);
         drawTriangle(292, HEIGHT/2+10, 20, 30, 1, c2);
@@ -79,8 +80,8 @@ void dispButton(u8 upflag, u8 dnflag)
 ////////////////////////////////////////////////////////////////////////////////
 void dispMyButton(u8 upflag, u8 dnflag)
 {
-    u16 c1 = upflag ? White : Black;
-    u16 c2 = dnflag ? White : Black;
+    u16 c1 = upflag ? Orange : White;
+    u16 c2 = dnflag ? Orange : White;
     if(WIDTH > HEIGHT){
         drawTriangle(WIDTH/2-32-30, 40, 20, 30, 0, c1);
         drawTriangle(WIDTH/2+32+10, 10, 20, 30, 1, c2);
@@ -109,25 +110,25 @@ void dispMyIdx(u16 idx)
     if(WIDTH > HEIGHT)
         drawNum(WIDTH/2-32, 10, 1, 0, idx, LightGrey);
     else
-        drawNum(0, (HEIGHT-32)/2, 1, 0, idx, White);
+        drawNum(0, (HEIGHT-32)/2, 1, 0, idx, Blue);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void clearLeftScreen()
 {
-	drawRec (dx , dy , dw, dh + 95, Black);
+	drawRec (dx , dy , dw, dh + 95, White);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void clearAllScreen()
 {
-	drawRec (0 , 0 , WIDTH, HEIGHT, Black);
+	drawRec (0 , 0 , WIDTH, HEIGHT, White);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void clearButtomScreen()
 {
-	drawRec (dx , dy + dh + 95 , dw, 240, Black);
+	drawRec (dx , dy + dh + 95 , dw, 240, White);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -152,9 +153,8 @@ void BSP_LCD_Configure()
 	initFSMC();
     
 	LCDC_Init_Reg();
-	lcdFillColor(Black);
+	lcdFillColor(White);
 	lcdBlcH();
-    clearAllScreen();
 }
 
 #endif

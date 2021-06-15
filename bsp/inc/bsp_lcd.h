@@ -169,6 +169,7 @@ void initFSMC(void);
 void drawCharCD(u16 x, u16 y, u8 bc, char c);
 void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num, u16 fore);
 void drawTriangle(u16 x, u16 y, u16 w, u16 h, u16 md, u16 c);
+void drawRoundRec (u16 x, u16 y, u16 w, u16 h, u16 c);
 
 #endif
 #endif

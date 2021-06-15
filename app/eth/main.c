@@ -60,8 +60,8 @@ void initPara()
     memset(ledStatus, 0x00, sizeof(ledStatus));
     memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
 
-    text.fore = White;
-    text.back = Black;
+    text.fore = Black;
+    text.back = White;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

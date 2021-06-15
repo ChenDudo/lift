@@ -583,6 +583,53 @@ void drawRec (u16 x, u16 y, u16 w, u16 h, u16 c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void drawHalfCircle(u16 x, u16 y, u16 r, u16 dir, u16 c)
+{
+    s32 D = 3 - (r << 1);	/* Decision Variable */
+    u32 CurX = 0;			/* Current X Value */
+    u32 CurY = r;			/* Current Y Value */
+	
+    if (dir){
+        while (CurX <= CurY) {
+            drawRec(x - CurX, y + CurY, CurX, 1, c);
+            drawRec(x - CurX, y - CurY, CurX, 1, c);
+            drawRec(x - CurY, y + CurX, CurY, 1, c);
+            drawRec(x - CurY, y - CurX, CurY, 1, c);
+            if (D < 0)
+                D += (CurX << 2) + 6;
+            else {
+                D += ((CurX - CurY) << 2) + 10;
+                CurY--;
+            }
+            CurX++;
+        }
+    }
+    else {
+        while (CurX <= CurY) {
+            drawRec(x, y + CurY, CurX, 1, c);
+            drawRec(x, y - CurY, CurX, 1, c);
+            drawRec(x, y + CurX, CurY, 1, c);
+            drawRec(x, y - CurX, CurY, 1, c);
+            if (D < 0)
+                D += (CurX << 2) + 6;
+            else {
+                D += ((CurX - CurY) << 2) + 10;
+                CurY--;
+            }
+            CurX++;
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void drawRoundRec (u16 x, u16 y, u16 w, u16 h, u16 c)
+{
+	drawRec (x + h / 2, y, w - h + 1, h, c);
+    drawHalfCircle(x + h / 2 , y + h / 2, h/2, 1, c);
+    drawHalfCircle(x + w - h / 2 , y + h / 2, h/2, 0, c);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void drawPoint(u16 x, u16 y, u16 c) 
 {
 	drawRec(x, y, 1, 1, c);
