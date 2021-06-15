@@ -63,9 +63,9 @@ void master_task()
 ////////////////////////////////////////////////////////////////////////////////
 void dispMasterLED(u8 phy)
 {
-    u16 x2 = (WIDTH - 30)/2;
+    u16 x2 = (WIDTH - 40)/2;
     u16 y2 = 302;
-    phy ? drawRec (x2, y2, 30,  16, Green) : drawRec (x2, y2, 30,  16, Red);
+    phy ? drawRoundRec (x2, y2, 40,  17, Green) : drawRoundRec (x2, y2, 40,  17, Red);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ void master_tick()
     }
     if (fCnt++ > 500){
         fCnt = 0;
-        dispMasterLED(phyA_Linked);
+        dispMasterLED(phyB_Linked);
         loopDisplayRxFLoor();
     }
     if (masterTickCnt++ >= 1500){

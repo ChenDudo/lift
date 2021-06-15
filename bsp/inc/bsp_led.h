@@ -181,16 +181,16 @@
 #endif
 
 
-#if defined(__LIFT_CALL)
+#if defined(__MM32_MB048)
 
-    #define LED1_PORT GPIOF
-    #define LED2_PORT GPIOF
+    #define LED1_PORT GPIOE
+    #define LED2_PORT GPIOE
 
-    #define LED1_BIT GPIO_Pin_9
-    #define LED2_BIT GPIO_Pin_8
+    #define LED1_BIT GPIO_Pin_4
+    #define LED2_BIT GPIO_Pin_3
 
-    #define LED1_CONFIG {COMMON_EnableIpClock(emCLOCK_GPIOF);GPIO_SetBits(LED1_PORT, LED1_BIT); GPIO_Mode_OUT_OD_20MHz_Init(LED1_PORT, LED1_BIT, NO_REMAP, GPIO_AF_0);}
-    #define LED2_CONFIG {COMMON_EnableIpClock(emCLOCK_GPIOF);GPIO_SetBits(LED2_PORT, LED2_BIT); GPIO_Mode_OUT_OD_20MHz_Init(LED2_PORT, LED2_BIT, NO_REMAP, 0xF);}
+    #define LED1_CONFIG {COMMON_EnableIpClock(emCLOCK_GPIOE);GPIO_SetBits(LED1_PORT, LED1_BIT); GPIO_Mode_OUT_PP_Init(LED1_PORT, LED1_BIT);}
+    #define LED2_CONFIG {                                    GPIO_SetBits(LED2_PORT, LED2_BIT); GPIO_Mode_OUT_PP_Init(LED2_PORT, LED2_BIT);}
     #define LED3_CONFIG {;}
     #define LED4_CONFIG {;}
 

@@ -81,12 +81,22 @@ void BSP_LED_Configure(void)
 /// @retval None.
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(LED1_PORT)
+#if defined(__MM32_MB048)
+void LD1_on(void)	{ GPIO_SetBits  (LED1_PORT, LED1_BIT); ledStatus[0] = true;  }
+void LD1_off(void)	{ GPIO_ResetBits(LED1_PORT, LED1_BIT); ledStatus[0] = false; }
+#else
 void LD1_on(void)	{ GPIO_ResetBits(LED1_PORT, LED1_BIT); ledStatus[0] = true;  }
 void LD1_off(void)	{ GPIO_SetBits  (LED1_PORT, LED1_BIT); ledStatus[0] = false; }
 #endif
+#endif
 #if defined(LED2_PORT)
+#if defined(__MM32_MB048)
+void LD2_on(void)	{ GPIO_SetBits  (LED2_PORT, LED2_BIT); ledStatus[1] = true;  }
+void LD2_off(void)	{ GPIO_ResetBits(LED2_PORT, LED2_BIT); ledStatus[1] = false; }
+#else
 void LD2_on(void)	{ GPIO_ResetBits(LED2_PORT, LED2_BIT); ledStatus[1] = true;  }
 void LD2_off(void)	{ GPIO_SetBits  (LED2_PORT, LED2_BIT); ledStatus[1] = false; }
+#endif
 #endif
 #if defined(LED3_PORT)
 void LD3_on(void)	{ GPIO_ResetBits(LED3_PORT, LED3_BIT); ledStatus[2] = true;  }

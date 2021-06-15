@@ -52,7 +52,7 @@ void dispLED(u8 phy1, u8 phy2)
         y2 = y1;
     }
     else {
-        x1 = (WIDTH - 30)/2;
+        x1 = (WIDTH - 40)/2;
         x2 = x1;
         y1 = 2;
         y2 = 302;
@@ -89,8 +89,8 @@ void dispMyButton(u8 upflag, u8 dnflag)
     else{
         //drawTriangle(55, 47, 20, 37, 0, c1);
         //drawTriangle(160,10, 20, 37, 1, c2);
-        drawTriangle(WIDTH/2-40, HEIGHT/2-10, 80, 100, 0, c1);
-        drawTriangle(WIDTH/2-40, HEIGHT/2+10, 80, 100, 1, c2);
+        drawTriangle(WIDTH/2-50, HEIGHT/2-10, 100, 100, 0, c1);
+        drawTriangle(WIDTH/2-50, HEIGHT/2+10, 100, 100, 1, c2);
     }
 }
 

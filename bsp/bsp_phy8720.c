@@ -237,12 +237,20 @@ void changePhy(u8 mode)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void BSP_PHY8720_Configure()
+void BSP_PHY8720_Configure(u16 phy_addr)
 {
     //changePhy(mode);
-    DeInitPhy_8720(PHY_ADDRESS_LAN8720_A);
-    DeInitPhy_8720(PHY_ADDRESS_LAN8720_B);
-    closePhy_8720(PHY_ADDRESS_LAN8720_B);
+    
+    if (phy_addr){
+        DeInitPhy_8720(PHY_ADDRESS_LAN8720_A);
+        closePhy_8720(PHY_ADDRESS_LAN8720_A);
+        DeInitPhy_8720(PHY_ADDRESS_LAN8720_B);
+    }
+    else {
+        DeInitPhy_8720(PHY_ADDRESS_LAN8720_A);
+        DeInitPhy_8720(PHY_ADDRESS_LAN8720_B);
+        closePhy_8720(PHY_ADDRESS_LAN8720_B);
+    }
 }
 
 /// @}

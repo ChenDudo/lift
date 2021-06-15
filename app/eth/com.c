@@ -56,7 +56,9 @@ void com_task()
         sendBCFinishFlag = true;
         preBCFlag = false;
     }
+#if !defined(__MasterTest)
     broadcastStateMachine();
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

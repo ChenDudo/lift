@@ -52,7 +52,7 @@
     #define BEEP_PWMCH 2
     #define CH_REMAPEN 1
     #define CH_REMAPID 1
-#elif defined(__MM32_MB036) || defined(__MM32_MB039)
+#elif defined(__MM32_MB036) || defined(__MM32_MB039) || defined(__MM32_MB048)
     #define BEEP_TIMER TIM1
     #define BEEP_PWMCH 1
     #define CH_REMAPEN 1

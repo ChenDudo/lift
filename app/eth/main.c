@@ -55,8 +55,13 @@
 void initPara()
 {
     SystemTick_Count = 0;
-    defaultphySelA = PHY_ADDRESS_LAN8720_A;
     
+#if defined(__MasterTest)
+    defaultphySelA = PHY_ADDRESS_LAN8720_B;
+#else    
+    defaultphySelA = PHY_ADDRESS_LAN8720_A;
+#endif
+    phySelA = defaultphySelA;
     memset(ledStatus, 0x00, sizeof(ledStatus));
     memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
 
@@ -100,7 +105,7 @@ void AppTaskTick()
         tickCnt = 0;
     }
     if(ready){
-        hci_tick();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+        hci_tick();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
         eth_tick();
         com_tick();
         lcd_tick();
@@ -120,8 +125,9 @@ int main(void)
 {
     MCUID = SetSystemClock(emSYSTICK_On, AppTaskTick);
 
-    initPeri();
     initPara();
+    initPeri();
+    
     ready = true;
     
     while (1) {
