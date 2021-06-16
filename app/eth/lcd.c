@@ -154,6 +154,14 @@ void BSP_LCD_Configure()
 	lcdFillColor(White);
 	lcdBlcH();
     clearAllScreen();
+    
+#if !defined(__MasterTest)    
+    dispMyButton(0, 0);
+    dispIdx(0, Blue);
+    dispMyIdx(0);
+    dispButton(0, 0);
+    dispLED(0, 0);
+#endif
 }
 
 #endif
