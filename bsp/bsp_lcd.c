@@ -18,11 +18,11 @@
 //  LCD Bus Ctrl
 ////////////////////////////////////////////////////////////////////////////////
 // ¢NNone	nRST
-// ¢PPF_11	BLC 
-// ¢PPD_13	RS  
-// ¢PPD_7 	nCS 
-// ¢PPD_5 	nWR 
-// ¢PPD_4 	nRD 
+// ¢PPF_11	BLC
+// ¢PPD_13	RS
+// ¢PPD_7 	nCS
+// ¢PPD_5 	nWR
+// ¢PPD_4 	nRD
 //   FMC D0-D15
 ////////////////////////////////////////////////////////////////////////////////
 void initGPIO_LCD()
@@ -77,8 +77,8 @@ void initGPIO_LCD()
     GPIO_ResetBits(GPIOF, GPIO_Pin_11);
 	GPIO_InitStructure.GPIO_Pin     = GPIO_Pin_11;
 	GPIO_InitStructure.GPIO_Mode    = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOF, &GPIO_InitStructure);  
-    
+	GPIO_Init(GPIOF, &GPIO_InitStructure);
+
     lcdCsL();
 }
 
@@ -89,14 +89,14 @@ void initFSMC(void)
     FSMC_TimingInitTypeDef  FSMC_TimingInitStructure;
 
     COMMON_EnableIpClock(emCLOCK_FSMC);
-    
+
     FSMC_TimingInitStructure.FSMC_SMReadPipe    = 0;
     FSMC_TimingInitStructure.FSMC_ReadyMode     = 0;
     FSMC_TimingInitStructure.FSMC_WritePeriod   = 0x2;
     FSMC_TimingInitStructure.FSMC_WriteHoldTime = 1;
     FSMC_TimingInitStructure.FSMC_AddrSetTime   = 3;
     FSMC_TimingInitStructure.FSMC_ReadPeriod    = 0x1;
-    
+
     FSMC_InitStructure.FSMC_Mode                = FSMC_Mode_8080;
     FSMC_InitStructure.FSMC_MemoryDataWidth     = FSMC_DataWidth_16bits;
     FSMC_InitStructure.FSMC_TimingRegSelect     = FSMC_TimingReg_Set0;
@@ -110,31 +110,31 @@ void initFSMC(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 void lcdCmd(u8 cmd)
-{	
+{
     *(u16*)(0x60000000) = cmd;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void lcdData(u8 dat)
-{	
+{
     *(u16*)(0x60000000 | (0x01 << 19)) = dat;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void lcdData16(u16 dat)
-{	
+{
     *(u16*)(0x60000000 | (0x01 << 19)) = dat;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void lcdSetWindow(u32 x, u32 y, u32 w, u32 h) 
+void lcdSetWindow(u32 x, u32 y, u32 w, u32 h)
 {
     lcdCmd(0x2A);
     lcdData(x >> 8);
     lcdData(x & 0xFF);
     lcdData((x + w - 1) >> 8);
     lcdData((x + w - 1) & 0xFF);
-	
+
     lcdCmd(0x2B);
     lcdData(y >> 8);
     lcdData(y & 0xFF);
@@ -145,16 +145,16 @@ void lcdSetWindow(u32 x, u32 y, u32 w, u32 h)
 ////////////////////////////////////////////////////////////////////////////////
 void lcdRst()
 {
-    
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void lcdFillColor(u16 c) 
+void lcdFillColor(u16 c)
 {
 	lcdSetWindow(0, 0, WIDTH,  HEIGHT);
     lcdCmd(0x2c);
 
-#ifdef MDM2803	
+#ifdef MDM2803
     lcdData(c);
 	for(u16 i = 0; i < (WIDTH * HEIGHT) / 8 ; i++) {
 		lcdData(0x0000);
@@ -178,7 +178,7 @@ void lcdFillColor(u16 c)
     	lcdData16(c);
     	lcdData16(c);
 	}
-#endif	
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +208,7 @@ void drawShadow(u16 x, u16 y, u16 w, u16 h,u8 frame, u16 c)
 void drawFrame(u16 x, u16 y, u16 w, u16 h,u8 frame, u8 sel)
 {
 	drawSquare(x, y, w, h, frame, FILL);
-	
+
 	u16 colour = (!sel) ?  color.c3 :  color.c4;
 	drawShadow(x, y, w, h, frame, colour);
 }
@@ -236,7 +236,7 @@ void drawDialog(u16 w, u16 h, char* str, Color_Def c)
 
 	drawSquare_1(x, y, w, h, c.back);
 	drawFrame_1(x + 6,  y + 6,  w - 12,  h - 12,  c.fore);
-	
+
 	text.back = LightGrey;
 	putStr(x + 12,  y + 1, 2, 1, str);
 }
@@ -258,12 +258,12 @@ void drawButton(u16 x, u16 y, u16 w, u16 h, u8 frame, u8 sel, char* str)
 
 ////////////////////////////////////////////////////////////////////////////////
 //static void _delay(u32 n)
-//{ 
+//{
 //	for(u32 i = 0; i < n; i++);
 //}
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawChar_6x8(u16 x, u16 y, u8 bc, u8 chr) 
+void drawChar_6x8(u16 x, u16 y, u8 bc, u8 chr)
 {
     if (0x1F < chr && chr < 0x90) {
         u16 k = (chr - 0x20) * 8;
@@ -283,7 +283,7 @@ void drawChar_6x8(u16 x, u16 y, u8 bc, u8 chr)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawChar_8x16(u16 x, u16 y, u8 bc, u8 chr) 
+void drawChar_8x16(u16 x, u16 y, u8 bc, u8 chr)
 {
     if (0x1F < chr && chr < 0x90) {
         u16 k = (chr - 0x20) * 16;
@@ -303,7 +303,7 @@ void drawChar_8x16(u16 x, u16 y, u8 bc, u8 chr)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawChar_8x12(u16 x, u16 y,  u8 bc, char c) 
+void drawChar_8x12(u16 x, u16 y,  u8 bc, char c)
 {
     if (0x1F < c && c < 0x90) {
         u16 k = (c - 0x20) * 12;
@@ -323,7 +323,7 @@ void drawChar_8x12(u16 x, u16 y,  u8 bc, char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawChar_16x24(u16 x, u16 y, u8 bc, char c) 
+void drawChar_16x24(u16 x, u16 y, u8 bc, char c)
 {
     if (0x1F < c && c < 0x90) {
         u16 k = (c - 0x20) * 24;
@@ -343,7 +343,7 @@ void drawChar_16x24(u16 x, u16 y, u8 bc, char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawCharCD(u16 x, u16 y, u8 bc, char c) 
+void drawCharCD(u16 x, u16 y, u8 bc, char c)
 {
     if (0x1F < c && c < 0x90) {
         u16 k = (c - 0x20) * 9;
@@ -370,7 +370,7 @@ void drawCharCD(u16 x, u16 y, u8 bc, char c)
 
 /* 88 * 107*/
 ////////////////////////////////////////////////////////////////////////////////
-void drawDSEG_88_107(u16 x, u16 y, u8 bc, u8 idx) 
+void drawDSEG_88_107(u16 x, u16 y, u8 bc, u8 idx)
 {
     u16 k = idx;
     for (u16 i = 0; i < 1177; i++) {
@@ -391,7 +391,7 @@ void drawDSEG_88_107(u16 x, u16 y, u8 bc, u8 idx)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawDSEG_72_80(u16 x, u16 y, u8 bc, u8 idx) 
+void drawDSEG_72_80(u16 x, u16 y, u8 bc, u8 idx)
 {
     u16 k = idx;
     for (u16 i = 0; i < 720; i++) {
@@ -412,7 +412,7 @@ void drawDSEG_72_80(u16 x, u16 y, u8 bc, u8 idx)
 
 /* 32 * 37*/
 ////////////////////////////////////////////////////////////////////////////////
-void drawDSEG_32_37(u16 x, u16 y, u8 bc, u8 idx, u16 fore) 
+void drawDSEG_32_37(u16 x, u16 y, u8 bc, u8 idx, u16 fore)
 {
     u16 k = idx;
     for (u16 i = 0; i < 148; i++) {
@@ -449,7 +449,7 @@ void drawTriangle(u16 x, u16 y, u16 w, u16 h, u16 md, u16 c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num, u16 fore) 
+void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num, u16 fore)
 {
     u16 x1 = x, x2;
     switch (mode){
@@ -491,7 +491,7 @@ void drawNum(u16 x, u16 y, u8 bc, u8 mode, s16 num, u16 fore)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void putChar(u16 x, u16 y, u8 font, u8 bc, char c) 
+void putChar(u16 x, u16 y, u8 font, u8 bc, char c)
 {
     if (c & 0x80) return;
     switch (font) {
@@ -514,7 +514,7 @@ void putChar(u16 x, u16 y, u8 font, u8 bc, char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void putStr(u16 x, u16 y, u8 font, u8 bc, char *str) 
+void putStr(u16 x, u16 y, u8 font, u8 bc, char *str)
 {
     while (*str) {
         switch(font) {
@@ -539,13 +539,13 @@ void putStr(u16 x, u16 y, u8 font, u8 bc, char *str)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void putBmp(u16 x, u16 y, u16 w, u16 h, u16 *ptr) 
+void putBmp(u16 x, u16 y, u16 w, u16 h, u16 *ptr)
 {
     lcdSetWindow(x, y, w, h);
     lcdCmd(0x2c);
-    
+
     for(u32 i = 0; i < (w * h); i++){
-		lcdData(*ptr++); 
+		lcdData(*ptr++);
     }
 }
 
@@ -562,10 +562,10 @@ void drawRec (u16 x, u16 y, u16 w, u16 h, u16 c)
 {
 	lcdSetWindow (x, y, w, h);
 	lcdCmd(0x2c);
-	
+
     u16 cnt = (w * h) / 8;
     u8  mod = (w * h) % 8;
-    
+
     for (u16 i = 0; i < cnt; i++){
         lcdData16(c);
         lcdData16(c);
@@ -576,7 +576,7 @@ void drawRec (u16 x, u16 y, u16 w, u16 h, u16 c)
         lcdData16(c);
         lcdData16(c);
     }
-    
+
     for (u8 i = 0; i < mod; i++){
         lcdData16(c);
     }
@@ -588,7 +588,7 @@ void drawHalfCircle(u16 x, u16 y, u16 r, u16 dir, u16 c)
     s32 D = 3 - (r << 1);	/* Decision Variable */
     u32 CurX = 0;			/* Current X Value */
     u32 CurY = r;			/* Current Y Value */
-	
+
     if (dir){
         while (CurX <= CurY) {
             drawRec(x - CurX, y + CurY, CurX, 1, c);
@@ -630,7 +630,7 @@ void drawRoundRec (u16 x, u16 y, u16 w, u16 h, u16 c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void drawPoint(u16 x, u16 y, u16 c) 
+void drawPoint(u16 x, u16 y, u16 c)
 {
 	drawRec(x, y, 1, 1, c);
 }
@@ -640,10 +640,10 @@ void drawLine (s16 x1, s16 y1, s16 x2, s16 y2, u16 c)
 {
 	u16 w = (x1 > x2) ? (x1 - x2) : (x2 - x1);
 	u16 h = (y1 > y2) ? (y1 - y2) : (y2 - y1);
-	
+
 	u16 x = (x1 > x2) ? (x2) : (x1);
 	u16 y = (y1 > y2) ? (y2) : (y1);
-	
+
 	if (y1 == y2) {
 		drawRec(x, y, w, 1, c);
 	}
@@ -652,22 +652,22 @@ void drawLine (s16 x1, s16 y1, s16 x2, s16 y2, u16 c)
 	}
 	else if (w >= h) {
 		for (u16 i = 0; i <= w; i++){
-			drawRec(x + i, 
-                    i * (y2 - y1) / w + y1, 
-                    1, 
-                    1, 
+			drawRec(x + i,
+                    i * (y2 - y1) / w + y1,
+                    1,
+                    1,
                     c);
-		}		
+		}
 	}
 	else {
 		for (u16 i = 0; i < h; i ++){
 			drawRec(
-                    ((y + i) * w ) / h + x,  
-                    y + i, 
-                    1, 
-                    1, 
+                    ((y + i) * w ) / h + x,
+                    y + i,
+                    1,
+                    1,
                     c);
-		}			   
+		}
 	}
 }
 
@@ -685,20 +685,20 @@ void drawTab(u16 x, u16 y, u16 w, u16 h, u8 m, u8 n)
 
 ////////////////////////////////////////////////////////////////////////////////
 void drawTabTitle(u16 x, u16 y, u16 w, u16 h, u8 m, u8 n)
-{	
+{
 	char str[8];
 	strcpy( str, "ADC");
 	putStr(175, 165, 0, 1, str);
 
 	strcpy( str, "IR");
 	putStr(253, 165, 0, 1, str);
-	
+
 	strcpy( str, "UART1");
 	putStr(175, 180, 0, 1, str);
-	
+
 	strcpy( str, "UART2");
 	putStr(243, 180, 0, 1, str);
-	
+
 	strcpy( str, "SPI");
 	putStr(175, 195, 0, 1, str);
 
@@ -715,7 +715,7 @@ void drawCircle(u16 x, u16 y, u16 r, u16 c)
     s32 D = 3 - (r << 1);	/* Decision Variable */
     u32 CurX = 0;			/* Current X Value */
     u32 CurY = r;			/* Current Y Value */
-	
+
     while (CurX <= CurY) {
         drawRec(x + CurX, y + CurY, 1, 1, c);
         drawRec(x + CurX, y - CurY, 1, 1, c);
@@ -737,235 +737,236 @@ void drawCircle(u16 x, u16 y, u16 r, u16 c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void lcdSetTextColor (u16 _color) 
+void lcdSetTextColor (u16 _color)
 {
 	text.fore = _color;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-u16 lcdGetTextColor (void) 
+u16 lcdGetTextColor (void)
 {
 	return text.fore;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void lcdSetBackColor (u16 _color) 
+void lcdSetBackColor (u16 _color)
 {
 	text.back = _color;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-u16 lcdGetBackColor (void) 
+u16 lcdGetBackColor (void)
 {
 	return text.back;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void LCDC_Init_Reg() 
-{ 
+void LCDC_Init_Reg()
+{
 #if defined(__MDM2803)
 	lcdCmd(0x28);   //display off
-	
+
     lcdCmd(0xCB);   //Power control A
-    lcdData(0x39); 
-    lcdData(0x2C); 
-    lcdData(0x00); 
-    lcdData(0x34); 
-    lcdData(0x02); 
+    lcdData(0x39);
+    lcdData(0x2C);
+    lcdData(0x00);
+    lcdData(0x34);
+    lcdData(0x02);
 
     lcdCmd(0xCF);   //Power control B
-    lcdData(0x00); 
-    lcdData(0xC1); 	//lcdData(0x81); 
-    lcdData(0X30); 
-    
+    lcdData(0x00);
+    lcdData(0xC1); 	//lcdData(0x81);
+    lcdData(0X30);
+
     lcdCmd(0xED);   //Power on sequence control
-    lcdData(0x64); 
-    lcdData(0x03); 
-    lcdData(0X12); 
-    lcdData(0X81); 
-    
+    lcdData(0x64);
+    lcdData(0x03);
+    lcdData(0X12);
+    lcdData(0X81);
+
     lcdCmd(0xE8);   //Driver timing control A
-    lcdData(0x85); 
-    lcdData(0x10); 
-    lcdData(0x7A); 
-    
+    lcdData(0x85);
+    lcdData(0x10);
+    lcdData(0x7A);
+
     lcdCmd(0xF7);   //Pump ratio control
-    lcdData(0x20); 
-    
+    lcdData(0x20);
+
     lcdCmd(0xEA);   //Driver timing control B
-    lcdData(0x00); 
-    lcdData(0x00); 
-    
-    lcdCmd(0xC0);    //Power control 
+    lcdData(0x00);
+    lcdData(0x00);
+
+    lcdCmd(0xC0);    //Power control
     lcdData(0x1B);   //VRH[5:0]  1B
-    
-    lcdCmd(0xC1);    //Power control 
-    lcdData(0x01);   //SAP[2:0];BT[3:0] 
-    
-    lcdCmd(0xC5);    //VCM control 
+
+    lcdCmd(0xC1);    //Power control
+    lcdData(0x01);   //SAP[2:0];BT[3:0]
+
+    lcdCmd(0xC5);    //VCM control
     lcdData(0x45);   //3F
     lcdData(0x25);   //3C
-    
-    lcdCmd(0xC7);    //VCM control2 
+
+    lcdCmd(0xC7);    //VCM control2
     lcdData(0XB7);   //b7
-    
-    lcdCmd(0x36);    // Memory Access Control 
+
+    lcdCmd(0x36);    // Memory Access Control
 #if defined(__WIDESCREEN)
     lcdData(0x28);
 #else
-    lcdData(0x48); 
+    //lcdData(0x48);
+    lcdData(0x88);
 #endif
-    
+
     lcdCmd(0x3A);    //Pixel Format Set
-    lcdData(0x55); 
-    
+    lcdData(0x55);
+
     lcdCmd(0xB1);    //Frame Rate Control
-    lcdData(0x00);   
-    lcdData(0x1A); 
-    
-    lcdCmd(0xB6);    //Display Function Control 
-    lcdData(0x0A); 
-    lcdData(0x82); 
-    
-    lcdCmd(0xF2);    //3Gamma Function Disable 
-    lcdData(0x00); 
-    
-    lcdCmd(0x26);    //Gamma curve selected 
-    lcdData(0x01); 
-    
-    lcdCmd(0xE0);    //Set Gamma 
-    lcdData(0x0F); 
-    lcdData(0x2A); 
-    lcdData(0x28); 
-    lcdData(0x08); 
-    lcdData(0x0E); 
-    lcdData(0x08); 
-    lcdData(0x54); 
-    lcdData(0XA9); 
-    lcdData(0x43); 
-    lcdData(0x0A); 
-    lcdData(0x0F); 
-    lcdData(0x00); 
-    lcdData(0x00); 
-    lcdData(0x00); 
-    lcdData(0x00); 
-    
-    lcdCmd(0xE1);    //Set Gamma 
-    lcdData(0x00); 
-    lcdData(0x15); 
-    lcdData(0x17); 
-    lcdData(0x07); 
-    lcdData(0x11); 
-    lcdData(0x06); 
-    lcdData(0x2B); 
-    lcdData(0x56); 
-    lcdData(0x3C); 
-    lcdData(0x05); 
-    lcdData(0x10); 
-    lcdData(0x0F); 
-    lcdData(0x3F); 
-    lcdData(0x3F); 
-    lcdData(0x0F); 
-    
+    lcdData(0x00);
+    lcdData(0x1A);
+
+    lcdCmd(0xB6);    //Display Function Control
+    lcdData(0x0A);
+    lcdData(0x82);
+
+    lcdCmd(0xF2);    //3Gamma Function Disable
+    lcdData(0x00);
+
+    lcdCmd(0x26);    //Gamma curve selected
+    lcdData(0x01);
+
+    lcdCmd(0xE0);    //Set Gamma
+    lcdData(0x0F);
+    lcdData(0x2A);
+    lcdData(0x28);
+    lcdData(0x08);
+    lcdData(0x0E);
+    lcdData(0x08);
+    lcdData(0x54);
+    lcdData(0XA9);
+    lcdData(0x43);
+    lcdData(0x0A);
+    lcdData(0x0F);
+    lcdData(0x00);
+    lcdData(0x00);
+    lcdData(0x00);
+    lcdData(0x00);
+
+    lcdCmd(0xE1);    //Set Gamma
+    lcdData(0x00);
+    lcdData(0x15);
+    lcdData(0x17);
+    lcdData(0x07);
+    lcdData(0x11);
+    lcdData(0x06);
+    lcdData(0x2B);
+    lcdData(0x56);
+    lcdData(0x3C);
+    lcdData(0x05);
+    lcdData(0x10);
+    lcdData(0x0F);
+    lcdData(0x3F);
+    lcdData(0x3F);
+    lcdData(0x0F);
+
     lcdCmd(0x11);   //Exit Sleep
-    while(!delay(120)); 
+    while(!delay(120));
     lcdCmd(0x29);   //display on
-    
+
 #else
-    lcdCmd(0x11); 
-    while(!delay(120)); 
-    
+    lcdCmd(0x11);
+    while(!delay(120));
+
     lcdCmd(0x36);
-#if defined(__WIDESCREEN)    
+#if defined(__WIDESCREEN)
     lcdData(0x60);
 #else
     lcdData(0xC0);
 #endif
-    
-    lcdCmd(0x3A); 
-    lcdData(0X05); 
-    
-    lcdCmd(0xB2);  
-    lcdData(0x0C); 
-    lcdData(0x0C); 
-    lcdData(0x00); 
+
+    lcdCmd(0x3A);
+    lcdData(0X05);
+
+    lcdCmd(0xB2);
+    lcdData(0x0C);
+    lcdData(0x0C);
+    lcdData(0x00);
     lcdData(0x33);
     lcdData(0x33);
-    
-    lcdCmd(0xB7);  
-    lcdData(0x35); 
-    
+
+    lcdCmd(0xB7);
+    lcdData(0x35);
+
     lcdCmd(0xBB);  				//vcom
     lcdData(0x32);    //30
-    
+
     lcdCmd(0xC0);  				  //
-    lcdData(0x2C); 
-    
-    lcdCmd(0xC2);  
-    lcdData(0x01); 
-    
+    lcdData(0x2C);
+
+    lcdCmd(0xC2);
+    lcdData(0x01);
+
     lcdCmd(0xC3);  	   //vrh
     lcdData(0x10); 	   //17		   0D
-    
+
     lcdCmd(0xC4);  			   //vdv
     lcdData(0x20);	  //20
-    
-    lcdCmd(0xC6);  
+
+    lcdCmd(0xC6);
     lcdData(0x0f);     //0f µ÷´¥ÃþÉÁ¶¯
-    
-    lcdCmd(0xD0);  
-    lcdData(0xA4); 
-    lcdData(0xA1); 
-    
-    lcdCmd(0xE0);    //Set Gamma 
-    lcdData(0xd0); 
-    lcdData(0x00); 
-    lcdData(0x02); 
-    lcdData(0x07); 
-    lcdData(0x0a); 
-    lcdData(0x28); 
-    lcdData(0x32); 
-    lcdData(0X44); 
-    lcdData(0x42); 
-    lcdData(0x06); 
-    lcdData(0x0e); 
-    lcdData(0x12); 
+
+    lcdCmd(0xD0);
+    lcdData(0xA4);
+    lcdData(0xA1);
+
+    lcdCmd(0xE0);    //Set Gamma
+    lcdData(0xd0);
+    lcdData(0x00);
+    lcdData(0x02);
+    lcdData(0x07);
+    lcdData(0x0a);
+    lcdData(0x28);
+    lcdData(0x32);
+    lcdData(0X44);
+    lcdData(0x42);
+    lcdData(0x06);
+    lcdData(0x0e);
+    lcdData(0x12);
     lcdData(0x14);
-    lcdData(0x17); 
-    
-    
-    lcdCmd(0XE1);    //Set Gamma 
-    lcdData(0xd0); 
-    lcdData(0x00); 
-    lcdData(0x02); 
-    lcdData(0x07); 
-    lcdData(0x0a); 
-    lcdData(0x28); 
-    lcdData(0x31); 
-    lcdData(0x54); 
-    lcdData(0x47); 
-    lcdData(0x0e); 
-    lcdData(0x1c); 
-    lcdData(0x17); 
-    lcdData(0x1b); 
-    lcdData(0x1e); 
-    
-    
-    lcdCmd(0x2A); 
+    lcdData(0x17);
+
+
+    lcdCmd(0XE1);    //Set Gamma
+    lcdData(0xd0);
+    lcdData(0x00);
+    lcdData(0x02);
+    lcdData(0x07);
+    lcdData(0x0a);
+    lcdData(0x28);
+    lcdData(0x31);
+    lcdData(0x54);
+    lcdData(0x47);
+    lcdData(0x0e);
+    lcdData(0x1c);
+    lcdData(0x17);
+    lcdData(0x1b);
+    lcdData(0x1e);
+
+
+    lcdCmd(0x2A);
     lcdData(0x00);
     lcdData(0x00);
     lcdData(0x00);
-    lcdData(0xef);	
-    
-    lcdCmd(0x2B); 
+    lcdData(0xef);
+
+    lcdCmd(0x2B);
     lcdData(0x00);
     lcdData(0x00);
     lcdData(0x01);
     lcdData(0x3f);
-    
+
     lcdCmd(0x29); //display on
     lcdCmd(0x2c);
-    
+
 #endif
 }
 #endif
