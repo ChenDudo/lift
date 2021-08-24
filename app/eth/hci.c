@@ -58,14 +58,10 @@ void hci_task()
 {
     BSP_Key(1);
     BSP_Key(2);
-    BSP_Key(3);
-    BSP_Key(4);
-    
+
     ledStatus[0] ? LD1_on() : LD1_off();
     ledStatus[1] ? LD2_on() : LD2_off();
-    ledStatus[2] ? LD3_on() : LD3_off();
-    ledStatus[3] ? LD4_on() : LD4_off();
-    
+
     if(K1Flag){
         dev_Up = true;
         K1Flag = false;
@@ -74,13 +70,7 @@ void hci_task()
         dev_Dn = true;
         K2Flag = false;
     }
-    if(K3Flag){
-        K3Flag = false;
-    }
-    if(K4Flag){      
-        K4Flag = false;
-    }
-    
+
     if (keyDoubleFlag[0]){
         dev_Up = false;
         keyDoubleFlag[0] = false;
@@ -94,11 +84,6 @@ void hci_task()
 ////////////////////////////////////////////////////////////////////////////////
 void hci_tick()
 {
-    static u16 hciCnt;
-    if (hciCnt++ > 249){
-        hciCnt = 0;
-        ledStatus[3] = !ledStatus[3];
-    }
     BSP_KeyTick();
     ledStatus[0] = dev_Up;
     ledStatus[1] = dev_Dn;
@@ -121,15 +106,11 @@ void Key2Down()
 ////////////////////////////////////////////////////////////////////////////////
 void Key3Down()
 {
-    K3Flag = true;
-    ledStatus[2] = !ledStatus[2];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void Key4Down()
 {
-    K4Flag = true;
-    ledStatus[3] = !ledStatus[3];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -147,24 +128,11 @@ void Key2Pressing()
 ////////////////////////////////////////////////////////////////////////////////
 void Key3Pressing()
 {
-    ledStatus[2] = 1;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-void resetTest()
-{
-    void (*fp)(void);
-    fp = (void (*)(void))(* (vu32 *)(0x8000004));
-    (*fp)(); 
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 void Key4Pressing()
 {
-    //COMMON_DisableIpClock(emCLOCK_ETH);
-    //ETH_Configure();
-    //resetTest();
 }
 
 /// @}

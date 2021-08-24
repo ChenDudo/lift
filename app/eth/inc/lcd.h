@@ -6,9 +6,9 @@
 
 #if defined(__MDM2803) || defined(__MDM2803_N)
 
-#define  DMAX 	80
+#define DMAX        80
 
-#define offsetH		50
+#define offsetH     50
 
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef _LCD_C_

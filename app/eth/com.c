@@ -50,12 +50,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 void com_task()
 {
-    /* send bc buffer */
+    /* send buffer */
     if(phyLink_Flag && preBCFlag){
         sendBuffer(sendptr, sizeof(sendptr));
         sendBCFinishFlag = true;
         preBCFlag = false;
     }
+
+    /* broadcast State Machine */
 #if !defined(__MasterTest)
     broadcastStateMachine();
 #endif
@@ -64,8 +66,29 @@ void com_task()
 ////////////////////////////////////////////////////////////////////////////////
 void com_tick()
 {
+    /* check communication status  */
     comTickFlag = true;
-    comTick++;
+    if (comTick++ > 99){
+        comTick = 0;
+        if (phyCom1_Flag){
+            phyA_Linking = true;
+            phyA_Linked = true;
+            phyA_LinkCnt = 10;
+        }
+        else
+            phyA_Linking = false;
+        if (phyCom2_Flag){
+            phyB_Linking = true;
+            phyB_Linked = true;
+            phyB_LinkCnt = 10;
+        }
+        else
+            phyB_Linking = false;
+        if (--phyA_LinkCnt == 0)
+            phyA_Linked = false;
+        if (--phyB_LinkCnt == 0)
+            phyB_Linked = false;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,13 +99,12 @@ void decodeFramDat(u8* rvBuff, u16 len)
     u16 datalen = 3 * *(rvBuff + 16);
     if (chksum(rvBuff, datalen + 17) != *(u16*)(rvBuff + datalen + 17)) return;
 #endif
-    
+
     /* Check Frame Type */
     if(*(u16*)(rvBuff + 12) != 0x88AE) return;
-    
-    /* decode receive data */
+
+    /* Decode receive data */
     revPtr = (pbuf*)rvBuff;
-    
     switch(revPtr->head[1]){
         /*......... broadcast .............*/
         case 0x01:
@@ -98,7 +120,6 @@ void decodeFramDat(u8* rvBuff, u16 len)
         memcpy((u8*)&revBCBuf2, rvBuff, len);
         getlastBoardIdx = revPtr->head[0];
         break;
-        
         /*......... heartbeat .............*/
         case 0x02:
         revHBFlag = true;
@@ -106,7 +127,6 @@ void decodeFramDat(u8* rvBuff, u16 len)
         case 0x82:
         revHBAckFlag = true;
         break;
-        
         /*......... otherType .............*/
         default:
         break;
@@ -119,7 +139,7 @@ u16 chksum(void *dataptr, u16 len)
     u32 acc;
     u16 src;
     u8 *octetptr;
-    
+
     acc = 0;
     octetptr = (u8*)dataptr;
     while (len > 1) {
@@ -134,12 +154,12 @@ u16 chksum(void *dataptr, u16 len)
         src = (*octetptr) << 8;
         acc += src;
     }
-    
+
     acc = (acc >> 16) + (acc & 0x0000ffffUL);
     if ((acc & 0xffff0000UL) != 0) {
         acc = (acc >> 16) + (acc & 0x0000ffffUL);
     }
-    
+
     src = (u16)acc;
     return ~src;
 }
@@ -151,15 +171,15 @@ void prepareBroadCastDat(u8 boardidx, u8 mode)
     u16 datalen = 0;
     u16 chsumlen = 0;
     memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
-    
+
     /* Head */
     /* headLen = sizeof(sendBCBuf.dirAddr) + sizeof(sendBCBuf.srcAddr) + sizeof(sendBCBuf.FrameType) + sizeof(sendBCBuf.head);*/
     memset(sendBCBuf.dirAddr, 0x55, sizeof(sendBCBuf.dirAddr));
     memset(sendBCBuf.srcAddr, 0x66, sizeof(sendBCBuf.srcAddr));
     sendBCBuf.FrameType[0] = 0xAE;
     sendBCBuf.FrameType[1] = 0x88;
-    
-    /* data */
+
+    /* Data */
     /* mode = 1, ack to master(Front node) */
     if (mode){
         /* if mydev is call up or down, add mydev information to data frame */
@@ -190,31 +210,31 @@ void prepareBroadCastDat(u8 boardidx, u8 mode)
         datalen = 3 * revBCBuf1.head[2];
         memcpy((u8*)&sendBCBuf, (u8*)&revBCBuf1, headLen+datalen);
     }
-    
+
     sendBCBuf.head[0] = boardidx;
     sendBCBuf.head[1] = mode ? (bcType | 0x80) : bcType;
-    
-    /* checksum */
+
+    /* Checksum */
 #if USE_CHECKSUM
     chsumlen = 2;
     u16 checksum = chksum((u8*)&sendBCBuf, headLen + datalen);
     sendBCBuf.data[datalen] = checksum;
     sendBCBuf.data[datalen+1] = (checksum & 0xFF00) >> 8;
 #endif
-    
-    /* copy to sendPtr */
+
+    /* Copy to sendPtr */
     memset(sendptr, 0x00, 316);
     memcpy(sendptr, (u8*)&sendBCBuf, headLen+datalen+chsumlen);
-    
+
     /* Finish */
     preBCFlag = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void broadcastStateMachine()
-{    
+{
     switch(broadcastSMState){
-        
+
         /* state 0: idle state: cheak broadcast */
         case 0:{
             if (revBCFlag){
@@ -224,7 +244,7 @@ void broadcastStateMachine()
             }
         }
         break;
-        
+
         /* state 1: ack to forward node */
         case 1:{
             static bool c1first = true;
@@ -237,18 +257,20 @@ void broadcastStateMachine()
             if (sendBCFinishFlag) {
                 sendBCFinishFlag = false;
                 broadcastSMState = 2;
+                phyCom1_Flag = true;
                 c1first = true;
             }
             else if (comTick > BCOVERTIME) {
                 SMERROR = sendAckError;
                 preBCFlag = false;
                 broadcastSMState = 0;
+                phyCom1_Flag = false;
                 comTick = 0;
                 c1first = true;
             }
         }
         break;
-        
+
         /* state 2: change to phyB, prepare send my idx to next node */
         case 2:{
             static bool c2first = true;
@@ -274,23 +296,25 @@ void broadcastStateMachine()
             }
         }
         break;
-        
+
         /* state 3: get next node ack signal, overtime retry & change PHYA */
         case 3:{
             if (revBCAckFlag){
                 saveLastBoardIdx = getlastBoardIdx;
                 broadcastSMState = 4;
+                phyCom2_Flag = true;
                 revBCAckFlag = false;
             }
             if (comTick > BCOVERTIME){
                 preBCFlag = false;
+                phyCom2_Flag = false;
                 SMERROR = revNextError;
                 broadcastSMState = 4;
                 comTick = 0;
             }
         }
         break;
-        
+
         /* state 4: change to phyA */
         case 4:{
             static bool c4first = true;
@@ -306,10 +330,10 @@ void broadcastStateMachine()
             }
         }
         break;
-        
+
         /* other */
         default:
-        
+
         break;
     }
 }

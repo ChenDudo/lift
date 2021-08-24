@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     COM.H
-/// @author   
+/// @author
 /// @version  v2.0.0
 /// @date     2019-03-13
 /// @brief    THIS FILE CONTAINS ALL THE FUNCTIONS PROTOTYPES FOR THE COMMUNICATION
@@ -55,7 +55,7 @@ GLOBAL u8 dir;
 GLOBAL u8 rxFloorCnt;
 GLOBAL u8 MAXFLOOR;
 GLOBAL u8 MINFLOOR;
-GLOBAL bool BCModeCoutinue;
+GLOBAL bool phyComFlag;
 GLOBAL u16 iTick;
 
 #undef GLOBAL
@@ -69,6 +69,11 @@ GLOBAL u16 iTick;
 void master_task(void);
 void master_tick(void);
 void BSP_MASTER_Configure(void);
+void masterDeInitBroadcast(void);
+void dispMasterLED(u8 phy);
+void dispMasterRxIdx(u16 idx);
+void dispMasterMyIdx(u16 idx);
+void dispMasterMyButton(u8 upflag, u8 dnflag);
 
 /// @}
 

@@ -53,10 +53,10 @@ void device_task()
     myDev.dn = dev_Dn;
 }
 
-u16 beepOpenTime;
 ////////////////////////////////////////////////////////////////////////////////
 void device_tick()
 {
+    static u16 beepOpenTime;
     if (myDev.up){
         if ((rxDev.id == myDev.id) && rxDev.up){
             beepOpenTime = 100;

@@ -55,10 +55,10 @@
 void initPara()
 {
     SystemTick_Count = 0;
-    
+
 #if defined(__MasterTest)
     defaultphySelA = PHY_ADDRESS_LAN8720_B;
-#else    
+#else
     defaultphySelA = PHY_ADDRESS_LAN8720_A;
 #endif
     phySelA = defaultphySelA;
@@ -81,7 +81,7 @@ void initPeri()
     BSP_LED_Configure();
     BSP_Device_Configure();
     ETH_Configure();
-    
+
     for(u8 i = 0; i < 2; i++){
         OpenLED();
         while(!delay(50));
@@ -105,7 +105,7 @@ void AppTaskTick()
         tickCnt = 0;
     }
     if(ready){
-        hci_tick();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+        hci_tick();
         eth_tick();
         com_tick();
         lcd_tick();
@@ -127,9 +127,9 @@ int main(void)
 
     initPara();
     initPeri();
-    
+
     ready = true;
-    
+
     while (1) {
         hci_task();
         eth_task();

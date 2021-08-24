@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     COM.H
-/// @author   
+/// @author
 /// @version  v2.0.0
 /// @date     2019-03-13
 /// @brief    THIS FILE CONTAINS ALL THE FUNCTIONS PROTOTYPES FOR THE COMMUNICATION
@@ -80,7 +80,7 @@ GLOBAL ErrorCodeNum SMERROR;
 GLOBAL u8 getfirstBoardIdx;
 GLOBAL u8 getlastBoardIdx;
 GLOBAL u8 sendBoardIdx;
-GLOBAL u8 sendBCType; 
+GLOBAL u8 sendBCType;
 GLOBAL u32 comTick;
 
 GLOBAL bool preBCFlag;
@@ -90,6 +90,10 @@ GLOBAL bool revBCAckFlag;
 GLOBAL bool revHBFlag;
 GLOBAL bool revHBAckFlag;
 GLOBAL bool sendBCFinishFlag;
+
+GLOBAL bool phyCom1_Flag;
+GLOBAL bool phyCom2_Flag;
+
 GLOBAL pbuf* revPtr;
 GLOBAL pbuf sendBCBuf;
 
