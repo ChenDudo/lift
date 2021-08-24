@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file     COM.C
-/// @author   D CHEN
-/// @version  v2.0.0
-/// @date     2019-03-13
-/// @brief    THIS FILE PROVIDES ALL THE UID EXAMPLE.
+/// @file     MASTER.C
+/// @author   Nanjing AE Team
+/// @version  v1.0.0
+/// @date     2021-07-01
+/// @brief    THIS FILE PROVIDES ALL THE LIFT EXAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
 /// @attention
 ///
@@ -50,9 +50,6 @@
 
 devType revDev[MAXDEVICE];
 u32 masterTickCnt;
-void masterSendBroadcast();
-void masterDecode();
-void loopDisplayRxFLoor();
 
 ////////////////////////////////////////////////////////////////////////////////
 void master_task()

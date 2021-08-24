@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file     UID.H
-/// @author   PX Liu
-/// @version  v2.0.0
-/// @date     2019-03-13
-/// @brief    THIS FILE CONTAINS ALL THE FUNCTIONS PROTOTYPES FOR THE UID
+/// @file     MAIN.H
+/// @author   Nanjing AE Team
+/// @version  v1.0.0
+/// @date     2021-07-01
+/// @brief    THIS FILE CONTAINS ALL THE FUNCTIONS PROTOTYPES FOR THE LIFT
 ///           EXAMPLES.
 ////////////////////////////////////////////////////////////////////////////////
 /// @attention

@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file     UID.C
-/// @author   D CHEN
-/// @version  v2.0.0
-/// @date     2019-03-13
-/// @brief    THIS FILE PROVIDES ALL THE UID EXAMPLE.
+/// @file     HCI.C
+/// @author   Nanjing AE Team
+/// @version  v1.0.0
+/// @date     2021-07-01
+/// @brief    THIS FILE PROVIDES ALL THE LIFT EXAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
 /// @attention
 ///

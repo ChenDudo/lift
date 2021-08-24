@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file     BSP_ETH.C
+/// @file     BSP_PHY8720.C
 /// @author   AE Team
 /// @version  v2.0.0
 /// @date     2019-02-18
-/// @brief    THIS FILE PROVIDES ALL THE LED BSP LAYER FUNCTIONS.
+/// @brief    THIS FILE PROVIDES ALL THE PHY BSP LAYER FUNCTIONS.
 ////////////////////////////////////////////////////////////////////////////////
 /// @attention
 ///
@@ -58,24 +58,24 @@ void PHY8720_GPIO_Config(void)
     COMMON_EnableIpClock(emCLOCK_GPIOD);
     COMMON_EnableIpClock(emCLOCK_GPIOE);
     COMMON_EnableIpClock(emCLOCK_EXTI);
-    
+
     // REF_CLK; CRS_DV; RD0; RD1
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_7;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_FLOATING;
-    GPIO_Init(GPIOA, &GPIO_InitStructure); 
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
-    
+
     // MDIO; TX_EN; TD0; TD1; MDC
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13;
-    GPIO_Init(GPIOB, &GPIO_InitStructure); 
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
-    
+
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_11);   // ETH_RX_CLK   PA1
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_11);   // ETH_MDIO     PA2
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_11);   // ETH_CRS_DV   PA7
@@ -93,7 +93,7 @@ void PHY8720_GPIO_Config(void)
 void PHY_LoopBackCmd(uint16_t addr, FunctionalState sta)
 {
     u16 temp_val;
-    
+
     temp_val = ETH_ReadPHYRegister(addr, PHY_BCR);
     sta ? (temp_val |= PHY_Loopback) : (temp_val &= ~PHY_Loopback);
     ETH_WritePHYRegister(addr, PHY_BCR, temp_val);
@@ -101,7 +101,7 @@ void PHY_LoopBackCmd(uint16_t addr, FunctionalState sta)
 
 ////////////////////////////////////////////////////////////////////////////////
 void closePhy_8720(u16 phyAddr)
-{    
+{
     ETH_WritePHYRegister(phyAddr, PHY_BCR, PHY_Powerdown);
 }
 
@@ -109,7 +109,7 @@ void closePhy_8720(u16 phyAddr)
 void changeAutoMDIX(u16 phyAddr, u8 mode)
 {
     u16 temp = ETH_ReadPHYRegister(phyAddr, 27);
-    
+
     temp |= 1 << 15;                                    // Disable AutoMDIX
     (mode) ? (temp &= ~(1 << 13)) : (temp |= 1 << 13);  // 0:Tx=Tx, 1:Tx=Rx
     ETH_WritePHYRegister(phyAddr, 27, temp);
@@ -119,7 +119,7 @@ void changeAutoMDIX(u16 phyAddr, u8 mode)
 void writePhyConfig(u16 phy_addr)
 {
     u16 readValue;
-    
+
     if (ETH_InitStructure.ETH_AutoNegotiation != ETH_AutoNegotiation_Disable) {
         while (!(ETH_ReadPHYRegister(phy_addr, PHY_BSR) & PHY_Linked_Status));
         ETH_WritePHYRegister(phy_addr, PHY_BCR, PHY_AutoNegotiation);
@@ -128,7 +128,7 @@ void writePhyConfig(u16 phy_addr)
     }
     else
         ETH_WritePHYRegister(phy_addr, PHY_BCR, ((u16)(ETH_InitStructure.ETH_Mode >> 3) | (u16)(ETH_InitStructure.ETH_Speed >> 1) ));
-    
+
     (ETH_Speed_10M == ETH_InitStructure.ETH_Speed) ? (SYSCFG->CFGR2 &= ~(1 << 21)) : (SYSCFG->CFGR2 |= (1 << 21));
     readValue = ETH_ReadPHYRegister(phy_addr, PHY_BSR);
     phyLink_Flag = (readValue & PHY_Linked_Status) ? true : false;
@@ -195,7 +195,7 @@ void checkPhyStatus(u16 phy_addr)
 void DeInitPhy_8720(u16 phy_addr)
 {
     changeAutoMDIX(phy_addr, 0);
-    
+
     if (ETH_InitStructure.ETH_AutoNegotiation != ETH_AutoNegotiation_Disable) {
         while (!(ETH_ReadPHYRegister(phy_addr, PHY_BSR) & PHY_Linked_Status));
         ETH_WritePHYRegister(phy_addr, PHY_BCR, PHY_AutoNegotiation);
@@ -207,11 +207,9 @@ void DeInitPhy_8720(u16 phy_addr)
     (ETH_Speed_10M == ETH_InitStructure.ETH_Speed) ? (SYSCFG->CFGR2 &= ~(1 << 21)) : (SYSCFG->CFGR2 |= (1 << 21));
 }
 
-u16 readPhyValue;
 ////////////////////////////////////////////////////////////////////////////////
 void initPhy_8720(u16 phy_addr)
 {
-    readPhyValue = ETH_ReadPHYRegister(phy_addr, PHY_BCR);
     ETH_WritePHYRegister(phy_addr, PHY_BCR, 0x2100);
 }
 
@@ -240,7 +238,7 @@ void changePhy(u8 mode)
 void BSP_PHY8720_Configure(u16 phy_addr)
 {
     //changePhy(mode);
-    
+
     if (phy_addr){
         DeInitPhy_8720(PHY_ADDRESS_LAN8720_A);
         closePhy_8720(PHY_ADDRESS_LAN8720_A);

@@ -3,7 +3,7 @@
 /// @author   AE Team
 /// @version  v2.0.0
 /// @date     2019-03-13
-/// @brief    THIS FILE CONTAINS ALL THE FUNCTIONS PROTOTYPES FOR THE LED
+/// @brief    THIS FILE CONTAINS ALL THE FUNCTIONS PROTOTYPES FOR THE PHY
 ///           BSP LAYER.
 ////////////////////////////////////////////////////////////////////////////////
 /// @attention
@@ -69,7 +69,7 @@
 #define PHY_AutoNego_Complete               ((uint16_t)0x0020)                  ///< Auto-Negotiation process completed
 #define PHY_Linked_Status                   ((uint16_t)0x0004)                  ///< Valid link established
 #define PHY_Jabber_detection                ((uint16_t)0x0002)                  ///< Jabber condition detected
-#define PHY_EnergyDetectPD                  ((u16)1 << 13)                      ///< 
+#define PHY_EnergyDetectPD                  ((u16)1 << 13)                      ///<
 
 /// @}
 

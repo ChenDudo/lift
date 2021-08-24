@@ -1,4 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////
+/// @file     LCD.C
+/// @author   Nanjing AE Team
+/// @version  v1.0.0
+/// @date     2021-07-01
+/// @brief    THIS FILE PROVIDES ALL THE LIFT EXAMPLE.
+////////////////////////////////////////////////////////////////////////////////
+/// @attention
+///
+/// THE EXISTING FIRMWARE IS ONLY FOR REFERENCE, WHICH IS DESIGNED TO PROVIDE
+/// CUSTOMERS WITH CODING INFORMATION ABOUT THEIR PRODUCTS SO THEY CAN SAVE
+/// TIME. THEREFORE, MINDMOTION SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT OR
+/// CONSEQUENTIAL DAMAGES ABOUT ANY CLAIMS ARISING OUT OF THE CONTENT OF SUCH
+/// HARDWARE AND/OR THE USE OF THE CODING INFORMATION CONTAINED HEREIN IN
+/// CONNECTION WITH PRODUCTS MADE BY CUSTOMERS.
+///
+/// <H2><CENTER>&COPY; COPYRIGHT 2018-2019 MINDMOTION </CENTER></H2>
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
 #define _LCD_C_
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(__MDM2803) || defined(__MDM2803_N)
