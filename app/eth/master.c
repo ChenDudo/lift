@@ -105,6 +105,7 @@ void master_tick()
             case 1: /* up */
             if (msDev.id >= MAXFLOOR){
                 dir = 2;
+                //msDev.up = 0;
                 return;
             }
             msDev.up = 1;
@@ -115,6 +116,7 @@ void master_tick()
             case 2: /* down */
             if(msDev.id == MINFLOOR){
                 dir = 1;
+                //msDev.dn = 0;
                 return;
             }
             msDev.up = 0;
@@ -134,7 +136,7 @@ void master_tick()
 ////////////////////////////////////////////////////////////////////////////////
 void dispMasterLED(u8 phy)
 {
-    u16 x2 = (WIDTH - 40)/2;
+    u16 x2 = (WIDTH - 40) / 2;
     u16 y2 = 302;
     phy ? drawRoundRec (x2, y2, 40,  17, Green) : drawRoundRec (x2, y2, 40,  17, Red);
 }
@@ -167,8 +169,8 @@ void dispMasterMyButton(u8 upflag, u8 dnflag)
     u16 c1 = upflag ? Orange : White;
     u16 c2 = dnflag ? Orange : White;
 
-    drawTriangle((WIDTH-70)/2, HEIGHT/2-60, 80, 80, 0, c1);
-    drawTriangle((WIDTH-70)/2, HEIGHT/2+60, 80, 80, 1, c2);
+    drawTriangle((WIDTH-80)/2, HEIGHT/2-60, 80, 80, 0, c1);
+    drawTriangle((WIDTH-80)/2, HEIGHT/2+60, 80, 80, 1, c2);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
