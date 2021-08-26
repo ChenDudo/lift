@@ -81,6 +81,7 @@ GLOBAL u8 getfirstBoardIdx;
 GLOBAL u8 getlastBoardIdx;
 GLOBAL u8 sendBoardIdx;
 GLOBAL u8 sendBCType;
+GLOBAL u8 comCnt;
 GLOBAL u32 comTick;
 
 GLOBAL bool preBCFlag;

@@ -72,7 +72,7 @@ void master_tick()
         dCnt = 0;
         if (phyComFlag){
             phy_Linked = true;
-            phy_LinkCnt = 20;
+            phy_LinkCnt = 10;
         }
         if (--phy_LinkCnt == 0){
             phy_Linked = false;

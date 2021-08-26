@@ -137,7 +137,7 @@ void writePhyConfig(u16 phy_addr)
 ////////////////////////////////////////////////////////////////////////////////
 void checkPhyStatus(u16 phy_addr)
 {
-    u16 readValue = 0;
+    static u16 readValue = 0;
     readValue = ETH_ReadPHYRegister(phy_addr, PHY_BSR);
     if(readValue == 0xFF){
         phyANEG_Flag = false;

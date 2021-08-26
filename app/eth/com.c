@@ -68,19 +68,23 @@ void com_tick()
 {
     /* check communication status  */
     comTickFlag = true;
-    if (comTick++ > 99){
-        comTick = 0;
+    comTick ++;
+    
+    if (++comCnt > 99){
+        comCnt = 0;
         if (phyCom1_Flag){
+            phyCom1_Flag = false;
             phyA_Linking = true;
             phyA_Linked = true;
-            phyA_LinkCnt = 10;
+            phyA_LinkCnt = 5;
         }
         else
             phyA_Linking = false;
         if (phyCom2_Flag){
+            phyCom2_Flag = false;
             phyB_Linking = true;
             phyB_Linked = true;
-            phyB_LinkCnt = 10;
+            phyB_LinkCnt = 5;
         }
         else
             phyB_Linking = false;
