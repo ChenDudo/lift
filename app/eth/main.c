@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     MAIN.C
-/// @author   Nanjing AE Team
+/// @author   ChenDo
 /// @version  v1.0.0
 /// @date     2021-07-01
 /// @brief    THIS FILE PROVIDES ALL THE LIFT EXAMPLE.
@@ -56,12 +56,6 @@ void initPara()
 {
     SystemTick_Count = 0;
 
-#if defined(__MasterTest)
-    defaultphySelA = PHY_ADDRESS_LAN8720_B;
-#else
-    defaultphySelA = PHY_ADDRESS_LAN8720_A;
-#endif
-    phySelA = defaultphySelA;
     memset(ledStatus, 0x00, sizeof(ledStatus));
     memset((u8*)&sendBCBuf, 0x00, sizeof(sendBCBuf));
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     ETH.C
-/// @author   Nanjing AE Team
+/// @author   ChenDo
 /// @version  v1.0.0
 /// @date     2021-07-01
 /// @brief    THIS FILE PROVIDES ALL THE LIFT EXAMPLE.
@@ -132,6 +132,13 @@ s8 recvBuffer()
 ////////////////////////////////////////////////////////////////////////////////
 void ETH_Configure(void)
 {
+#if defined(__MasterTest)
+    defaultphySelA = PHY_ADDRESS_LAN8720_B;
+#else
+    defaultphySelA = PHY_ADDRESS_LAN8720_A;
+#endif
+    phySelA = defaultphySelA;
+
     RCC->APB1ENR |= RCC_APB1ENR_PWR;
     PWR->CR |= 3 << 14;
 

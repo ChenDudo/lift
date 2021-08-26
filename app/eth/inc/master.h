@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     MASTER.H
-/// @author   Nanjing AE Team
+/// @author   ChenDo
 /// @version  v1.0.0
 /// @date     2021-07-01
 /// @brief    THIS FILE CONTAINS ALL THE FUNCTIONS PROTOTYPES FOR THE LIFT
@@ -43,20 +43,22 @@
 #ifdef _MASTER_C_
 #define GLOBAL
 
+GLOBAL bool phyComFlag;
 GLOBAL u8 MAXFLOOR = 20;
 GLOBAL u8 MINFLOOR = 0;
-GLOBAL bool BCModeCoutinue = true;
+GLOBAL u8 dir;
+GLOBAL u8 rxFloorCnt;
+GLOBAL u8 MAXFLOOR;
+GLOBAL u8 MINFLOOR;
+GLOBAL u16 iTick;
+GLOBAL u32 masterTickCnt;
+GLOBAL devType revDev[MAXDEVICE];
 
 #else
 #define GLOBAL extern
 #endif
 
-GLOBAL u8 dir;
-GLOBAL u8 rxFloorCnt;
-GLOBAL u8 MAXFLOOR;
-GLOBAL u8 MINFLOOR;
-GLOBAL bool phyComFlag;
-GLOBAL u16 iTick;
+
 
 #undef GLOBAL
 

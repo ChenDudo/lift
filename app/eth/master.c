@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     MASTER.C
-/// @author   Nanjing AE Team
+/// @author   ChenDo
 /// @version  v1.0.0
 /// @date     2021-07-01
 /// @brief    THIS FILE PROVIDES ALL THE LIFT EXAMPLE.
@@ -45,11 +45,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @addtogroup UID_Exported_Functions
 /// @{
-
-#define BCPEIROD 2
-
-devType revDev[MAXDEVICE];
-u32 masterTickCnt;
 
 ////////////////////////////////////////////////////////////////////////////////
 void master_task()
@@ -130,7 +125,6 @@ void master_tick()
             break;
         }
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -249,8 +243,6 @@ void masterDeInitBroadcast()
 
     /* copy to ptr */
     memcpy(sendptr, (u8*)&sendBCBuf, headLen+datalen+chsumlen);
-
-    //sendBuffer(sendptr, sizeof(sendptr));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -271,15 +263,12 @@ void masterDecode()
 void BSP_MASTER_Configure()
 {
     dir = 1;
-    BCModeCoutinue = true;
     masterDeInitBroadcast();
-
     dispMasterMyIdx(0);
     dispMasterMyButton(0, 0);
     dispMasterLED(0);
     dispMasterRxIdx(0);
     dispMasterRxButton(0, 0);
-    //putStr(10, 20, 2, 1, "SIMULATOR");
 }
 
 #endif

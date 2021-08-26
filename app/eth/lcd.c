@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file     LCD.C
-/// @author   Nanjing AE Team
+/// @author   ChenDo
 /// @version  v1.0.0
 /// @date     2021-07-01
 /// @brief    THIS FILE PROVIDES ALL THE LIFT EXAMPLE.
